@@ -14,13 +14,13 @@ export const getProductById = async (id, token) => {
         ? { headers: { Authorization: `Bearer ${token}` } }
         : undefined;
 
-    const response = await API.get(`/products/${id}`, config);
+    const response = await API.get(`/product/${id}`, config);
 
     // Si response.data.data es un objeto producto, no hagas map
     const item = response.data.data;
 
     return {
-        id: item.code,
+        id: item.id,
         title: item.product,
         description: item.description,
         price: item.price,
@@ -35,7 +35,7 @@ export const getProductById = async (id, token) => {
             : "otros",
         categoryId: "otros",
         seller: item.userName ?? "",
-        phoneNumber: "",
+        phoneNumber: item.phoneNumber,
         comments: [],
     };
 };
@@ -55,14 +55,14 @@ export const getCommentByProductId = async (id, token) => {
         }))
         : [];
 };
-export const postComment = async (productCode, comment, token) => {
+export const postComment = async (productId, comment, token) => {
     const config = token
         ? { headers: { Authorization: `Bearer ${token}` } }
         : undefined;
 
     const body = {
-        productCode,
-        comment,
+        productId: productId,
+        comment: comment,
     };
 
     const response = await API.post('/comments/create', body, config);

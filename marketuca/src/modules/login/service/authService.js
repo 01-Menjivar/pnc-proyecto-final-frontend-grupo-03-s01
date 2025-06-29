@@ -7,13 +7,13 @@ const API = axios.create({
   },
 });
 
-export const loginUser = async ({ username, password }) => {
+export const loginUser = async ({ email, password }) => {
   try {
-    const res = await API.post("/auth/login", { username, password });
+    const res = await API.post("/user/auth/login", { email, password });
 
-    if (res.status === 202 && res.data?.data) {
+    if ((res.status === 200 || res.status === 201) && res.data?.data) {
       const token = res.data.data;
-      localStorage.setItem("auth_token", token); // puedes reemplazar con cookie si deseas más seguridad
+      localStorage.setItem("auth_token", token);
       return {
         data: token,
         message: res.data.message || "Inicio de sesión exitoso.",

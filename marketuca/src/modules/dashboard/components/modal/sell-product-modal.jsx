@@ -6,6 +6,7 @@ import { Button } from "../../../utils/ui/button"
 import { Input } from "../../../utils/ui/input"
 import { Modal } from "../modal/modal"
 import {
+  postProduct,
   postProductAlternative
 } from "../../services/dashboardService.js"
 import { AuthContext } from "../../../../context/AuthContext.jsx"
@@ -18,9 +19,8 @@ export function SellProductModal({ isOpen, onClose, categories }) {
   const [formData, setFormData] = useState({
     title: "",
     price: "",
-    category: "",
+    categoryName: "",
     condition: "",
-    location: "",
     description: "",
   })
 
@@ -47,13 +47,13 @@ export function SellProductModal({ isOpen, onClose, categories }) {
         alert("Debes seleccionar al menos una imagen.")
         return
       }
-      await postProductAlternative(formData, images, token)
+      console.log(formData);
+      await postProduct(formData, images, token)
       setFormData({
         title: "",
         price: "",
-        category: "",
+        categoryName: "",
         condition: "",
-        location: "",
         description: "",
       })
       setImages([])
@@ -111,9 +111,9 @@ export function SellProductModal({ isOpen, onClose, categories }) {
                   Categoría *
                 </label>
                 <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
+                    id="categoryName"
+                    name="categoryName"
+                    value={formData.categoryName}
                     onChange={handleChange}
                     className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
                     required
@@ -121,7 +121,7 @@ export function SellProductModal({ isOpen, onClose, categories }) {
                   <option value="" disabled>
                     Selecciona una categoría
                   </option>
-                  {categories.map((category) => (
+                  {categories.slice(1).map((category) => (
                       <option key={category.id} value={category.name}>
                         {category.name}
                       </option>
@@ -150,20 +150,6 @@ export function SellProductModal({ isOpen, onClose, categories }) {
                   <option value="Para reparar">Para reparar</option>
                 </select>
               </div>
-            </div>
-            {/* Ubicación */}
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                Ubicación *
-              </label>
-              <Input
-                  id="location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  placeholder="Ej: Facultad de Ingeniería"
-                  required
-              />
             </div>
             {/* Descripción */}
             <div>

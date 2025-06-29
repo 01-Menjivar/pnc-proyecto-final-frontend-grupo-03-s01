@@ -18,33 +18,77 @@ API.interceptors.request.use((config) => {
 });
 
 export const getAllProducts = async (token) => {
-    const response = await API.get("/products/", {
+    const response = await API.get("/product/", {
         headers: token
             ? { Authorization: `Bearer ${token}` }
             : undefined
     });
     // Si el backend entrega los datos como .data.data:
     return response.data.data.map(item => ({
-        id: item.code,
+        id: item.id,
         title: item.product,
         description: item.description,
         price: item.price,
         condition: item.condition,
         image: item.images?.[0],
         images: item.images || [],
-        category: item.categoryName
-            ? item.categoryName
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-            : "otros",
-        categoryId: "otros",
+        categoryName: item.categoryName,
         seller: item.userName ?? "",
-        phoneNumber: "",
+        phoneNumber: item.phoneNumber,
         comments: [],
     }));
 };
+export const postProduct = async (formDataObj, images, token) => {
+    const formData = new FormData();
 
+    // Objeto con los datos del producto
+    const productData = {
+        product: formDataObj.title,
+        description: formDataObj.description,
+        price: Number(formDataObj.price),
+        condition: formDataObj.condition,
+        categoryName: formDataObj.categoryName,
+    };
+
+    // Convertir el objeto a JSON como Blob
+    const jsonBlob = new Blob([JSON.stringify(productData)], {
+        type: "application/json",
+    });
+
+    // Agregar el JSON al FormData como archivo
+    formData.append("product", jsonBlob, "product.json");
+
+    // Agregar imágenes
+    if (images && images.length > 0) {
+        images.forEach((file, index) => {
+            formData.append("images", file, file.name || `image_${index}.jpg`);
+        });
+    }
+
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/product/create`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al enviar producto:", error);
+        if (error.response) {
+            throw new Error(
+                `Error ${error.response.status}: ${error.response.data}`
+            );
+        } else {
+            throw new Error("Error desconocido al enviar producto.");
+        }
+    }
+};
 
 // Opción 2: Si tu backend espera JSON + archivos por separado
 export const postProductAlternative = async (formDataObj, images, token) => {
@@ -56,8 +100,7 @@ export const postProductAlternative = async (formDataObj, images, token) => {
         description: formDataObj.description,
         price: Number(formDataObj.price),
         condition: formDataObj.condition,
-        categoryName: formDataObj.category.toLowerCase(),
-        location: formDataObj.location,
+        categoryName: formDataObj.categoryName,
     };
 
     // Crear un Blob con tipo application/json explícito
@@ -75,7 +118,7 @@ export const postProductAlternative = async (formDataObj, images, token) => {
     }
 
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products/create`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/product/create`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -95,3 +138,62 @@ export const postProductAlternative = async (formDataObj, images, token) => {
         throw error;
     }
 };
+export const likeProduct = async (productId, token) => {
+    const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : undefined;
+    try {
+        const res = await API.post(
+            `/likes/add`,
+            {productId},
+            config
+        );
+
+       if(res.status === 201) return res.data;
+    }
+    catch (error) {
+        console.error("Error al enviar producto:", error);
+    }
+
+}
+export const dislikeProduct = async (productId, token) => {
+    const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : undefined;
+    try {
+        const res = await API.delete(
+            `/likes/delete/${productId}`,
+            config
+        );
+
+        if(res.status === 202) return res.data;
+    }
+    catch (error) {
+        console.error("Error al enviar producto:", error);
+    }
+
+}
+export const getLikes = async (token) => {
+    const config = token
+        ? { headers: { Authorization: `Bearer ${token}` } }
+        : undefined;
+
+    try {
+        const response = await API.get(`/likes/`, config);
+
+        if (response.status === 201) {
+            return response.data.data.map((like) => ({
+                likeId: like.id,
+                productId: like.product,
+            }));
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error al obtener likes:", error);
+        return [];
+    }
+};
+
+
+

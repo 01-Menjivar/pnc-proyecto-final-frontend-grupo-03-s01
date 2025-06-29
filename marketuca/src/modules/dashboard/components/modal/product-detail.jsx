@@ -8,10 +8,9 @@ import { motion } from "framer-motion"
 import Whatsapp from "../../../utils/ui/Whatsapp.jsx";
 import { Link } from "react-router-dom";
 
-export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorite, onToggleFavorite }) {
+export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorite, onToggleFavorite, isLiking }) {
   const [activeImage, setActiveImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
-
   // Galería de imágenes: usa todas las del producto si existen
   const productImages = product?.images && product.images.length > 0
       ? product.images
@@ -20,7 +19,6 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
         "/placeholder.svg?height=200&width=200&text=Vista+frontal",
         "/placeholder.svg?height=200&width=200&text=Vista+trasera",
       ]
-
   const handleQuantityChange = (amount) => {
     const newQuantity = quantity + amount
     if (newQuantity >= 1) {
@@ -29,7 +27,7 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
   }
 
   const handleWhatsappClick = () => {
-    const phone = product?.phoneNumber || "77777777" // default si no hay número
+    const phone = "+503"+product?.phoneNumber || "77777777"
     const message = `Hola, estoy interesado en el producto: ${product.title}. ¿Podrías darme más información?`
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
@@ -76,17 +74,13 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
                     ? product.category.charAt(0).toUpperCase() + product.category.slice(1)
                     : ""}
               </span>
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="text-sm font-medium">{product.rating ?? "4.5"}</span>
-                </div>
               </div>
               <h1 className="text-2xl font-bold mt-1">{product.title}</h1>
               <p className="text-3xl font-bold text-[#0056b3] mt-2">${product.price?.toFixed(2) ?? "0.00"}</p>
               <div className="flex items-center mt-2 text-sm text-gray-600">
                 <span>Condición: {product.condition}</span>
                 <span className="mx-2">•</span>
-                <span>Ubicación: {product.location ?? "No especificada"}</span>
+
               </div>
             </div>
 

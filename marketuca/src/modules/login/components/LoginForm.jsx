@@ -21,7 +21,7 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const { data, message } = await loginUser({ username: email, password });
+      const { data, message } = await loginUser({ email, password });
       setModalData({
         title: "Inicio de sesión exitoso",
         message: message || "Has iniciado sesión correctamente.",

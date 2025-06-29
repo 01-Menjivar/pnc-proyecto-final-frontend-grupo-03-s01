@@ -11,6 +11,9 @@ const ProductsSection = ({
                              onProductClick,    // <-- Nombre estándar del prop
                              favorites,
                              toggleFavorite,
+                             onLike,
+                                isLiking
+
                          }) => {
     const productVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -70,18 +73,29 @@ const ProductsSection = ({
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
                             />
-                            <motion.button
-                                className={`absolute top-2 right-2 rounded-full p-2 bg-white/80 backdrop-blur-sm ${favorites.includes(product.id) ? "text-red-500" : "text-gray-500"}`}
+                            <button
+                                type="button"
+                                disabled={isLiking}
+                                className={`absolute top-2 right-2 rounded-full p-2 bg-white/80 backdrop-blur-sm ${
+                                    favorites.some((f) => f.productId === product.id)
+                                        ? "text-red-500"
+                                        : "text-gray-500"
+                                }`}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    toggleFavorite(product.id);
+                                    onLike(product.id);
                                 }}
-                                variants={heartVariants}
-                                initial="initial"
-                                animate={favorites.includes(product.id) ? "animate" : "initial"}
                             >
-                                <Heart className={`w-5 h-5 ${favorites.includes(product.id) ? "fill-current" : ""}`} />
-                            </motion.button>
+                                <motion.div
+                                    variants={heartVariants}
+                                    initial="initial"
+                                    animate={favorites.includes(product.id) ? "animate" : "initial"}
+                                >
+                                    <Heart
+                                        className={`w-5 h-5 ${favorites.includes(product.id) ? "fill-current" : ""}`}
+                                    />
+                                </motion.div>
+                            </button>
                             <div className="absolute bottom-0 left-0 right-0 p-2 text-xs font-medium text-white bg-gradient-to-t from-black/70 to-transparent">
                                 {product.location}
                             </div>
@@ -107,7 +121,8 @@ const ProductsSection = ({
                                         className="bg-gradient-to-r from-[#0056b3] to-[#339CFF] hover:from-[#339CFF] hover:to-[#0056b3] text-white px-3 py-1 rounded"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            onProductClick(product);
+                                            onProductClick(product) // <<
+
                                         }}
                                     >
                                         Ver detalles

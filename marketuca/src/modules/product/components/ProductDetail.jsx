@@ -41,10 +41,55 @@ const ProductDetail = ( ) => {
         fetchProduct();
     }, [id]);
 
-    if (loading) return <div>Cargando...</div>;
-    if (!product) return <div>No se encontró el producto</div>;
+    if (loading) return (
+        <motion.div
+            className="flex items-center justify-center h-screen text-[#0056b3] text-lg font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
+            <motion.svg
+                className="animate-spin h-6 w-6 mr-3 text-[#0056b3]"
+                viewBox="0 0 24 24"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+            >
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </motion.svg>
+            Cargando producto...
+        </motion.div>
+    );
+    if (!product) return (
+        <motion.div
+            className="flex flex-col items-center justify-center h-96 text-gray-600"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+        >
+            <motion.img
+                src="/placeholder.svg?height=120&width=120&text=No+encontrado"
+                alt="Producto no encontrado"
+                className="mb-4 opacity-70"
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 0.7 }}
+                transition={{ delay: 0.2 }}
+            />
+            <motion.p className="text-lg font-medium mb-1">No se encontró el producto</motion.p>
+            <motion.p
+                className="text-sm text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+            >
+                Verifica la información o selecciona otro producto.
+            </motion.p>
+        </motion.div>
+    );
 
-   return (
+
+    return (
         <motion.div
             className="min-h-screen py-8 my-4 relative"
             initial={{ opacity: 0, y: 40 }}
