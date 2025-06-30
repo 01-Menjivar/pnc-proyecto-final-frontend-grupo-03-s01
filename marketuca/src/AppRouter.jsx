@@ -10,6 +10,7 @@ import AdminManager
     from "./modules/adminManager/page/AdminManager.jsx";
 import Product from "./modules/product/page/Product.jsx";
 import DashboardBackend from "./modules/dashboard/page/dashboardBackend.jsx";
+import UserProfile from "./modules/userProfile/page/UserProfile.jsx";
 export const AppRouter = () => {
   return (
     <Routes>
@@ -22,6 +23,7 @@ export const AppRouter = () => {
         <Route path={"/waitlist"} element={<WaitingList isAdmin={true} />} />
         <Route path={"/adminman"} element={<AdminManager isAdmin={true} />} />
         <Route path={"/product/:id"} element={<Product/>}/>
+        <Route path={"/user/:email"} element={<UserProfile />} />
     </Routes>
   );
 };
