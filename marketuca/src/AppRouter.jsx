@@ -6,10 +6,10 @@ import Login from "./modules/login/page/login.jsx";
 import Register from "./modules/register/page/register.jsx";
 import Profile from "./modules/profile/page/profile.jsx";
 import WaitingList from "./modules/waiting/page/WaitingList.jsx";
-import AdminManager
-    from "./modules/adminManager/page/AdminManager.jsx";
+import AdminManager from "./modules/adminManager/page/AdminManager.jsx";
 import Product from "./modules/product/page/Product.jsx";
 import DashboardBackend from "./modules/dashboard/page/dashboardBackend.jsx";
+import AdminDashboard from "./modules/adminDashboard/page/mainAdmin.jsx";
 import UserProfile from "./modules/userProfile/page/UserProfile.jsx";
 export const AppRouter = () => {
   return (
@@ -21,8 +21,8 @@ export const AppRouter = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path={"/waitlist"} element={<WaitingList isAdmin={true} />} />
-        <Route path={"/adminman"} element={<AdminManager isAdmin={true} />} />
         <Route path={"/product/:id"} element={<Product/>}/>
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path={"/user/:email"} element={<UserProfile />} />
     </Routes>
   );

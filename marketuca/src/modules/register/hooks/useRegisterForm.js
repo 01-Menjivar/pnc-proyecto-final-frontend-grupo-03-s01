@@ -18,22 +18,22 @@ const useRegisterForm = () => {
     const fullName = `${data.nombre} ${data.apellido}`;
     const payload = {
       name: fullName,
-      username: data.email,
+      email: data.email,
       password: data.password,
       faculty: data.facultad,
-      phoneNumber: data.telefono.replace('+503', ''),
+      phoneNumber: data.telefono,
     };
 
     try {
-      await postData('/auth/register', payload);
+      await postData('/user/auth/register', payload);
       setModalData({
         title: '¡Registro exitoso!',
-        message: 'Tu cuenta ha sido creada correctamente.',
+        message: 'Tu cuenta ha sido creada correctamente. Serás redirigido al inicio de sesión en unos segundos.',
         isError: false,
       });
       reset();
-
       setTimeout(() => {
+        setModalOpen(false);
         navigate('/login');
       }, 2000);
     } catch (error) {
@@ -48,6 +48,13 @@ const useRegisterForm = () => {
     }
   };
 
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (!modalData.isError) {
+      navigate('/login');
+    }
+  };
+
   return {
     register,
     handleSubmit,
@@ -58,6 +65,7 @@ const useRegisterForm = () => {
     setModalOpen,
     modalData,
     isLoading,
+    handleModalClose,
   };
 };
 

@@ -10,8 +10,8 @@ import {
     BookUp, ClockAlert
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../ui/button.jsx";
+import { Input } from "../ui/input.jsx";
 import { Link } from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 
@@ -94,17 +94,7 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                             className="text-xl font-bold text-[#0056b3]">MarketPlace UCA</span>
                     </motion.div>
                 </Link>
-                <div className="flex items-center max-w-md w-full relative">
-                    <Input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyPress={handleSearch}
-                        placeholder="Buscar productos, servicios, libros..."
-                        className="pl-10 pr-4 rounded-full border-[#B3D7FF] focus:border-[#339CFF]"
-                    />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                </div>
+                
                 <div className="flex items-center gap-3">
 
                     <motion.div whileHover="hover" whileTap="tap" variants={buttonVariants}>
@@ -193,7 +183,7 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                                                 className="flex items-center gap-2 px-4 py-2 text-gray-700 cursor-pointer"
                                                 onClick={() => {
                                                     setIsMenuOpen(false);
-                                                    window.location.href = "/adminDashboard";
+                                                    window.location.href = "/adminman";
                                                 }}
                                             >
                                                 <BookUp className="w-4 h-4" />
