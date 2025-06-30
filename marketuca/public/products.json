@@ -1,0 +1,962 @@
+[
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 81.64,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 1,
+      "username": "laura0",
+      "email": "laura0@mail.com"
+    }
+  },
+  {
+    "Product": "Camiseta negra",
+    "Description": "Camiseta de algodón 100% para hombre",
+    "Price": 23.27,
+    "Condition": "Nuevo",
+    "Images": [
+      "camiseta_negra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Pedro",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 2,
+      "username": "daniel1",
+      "email": "daniel1@mail.com"
+    }
+  },
+  {
+    "Product": "Auriculares Bluetooth",
+    "Description": "Auriculares inalámbricos con micrófono",
+    "Price": 28.05,
+    "Condition": "Nuevo",
+    "Images": [
+      "auriculares_bluetooth.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Lucía",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "No lo recomiendo"
+      },
+      {
+        "id": 3,
+        "author": "Carlos",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Tecnología",
+    "User": {
+      "id": 3,
+      "username": "sofía2",
+      "email": "sofía2@mail.com"
+    }
+  },
+  {
+    "Product": "Hamburguesa doble",
+    "Description": "Combo con papas y bebida",
+    "Price": 21.63,
+    "Condition": "Nuevo",
+    "Images": [
+      "hamburguesa_doble.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Pedro",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 4,
+      "username": "lucía3",
+      "email": "lucía3@mail.com"
+    }
+  },
+  {
+    "Product": "Hamburguesa doble",
+    "Description": "Combo con papas y bebida",
+    "Price": 22.97,
+    "Condition": "Nuevo",
+    "Images": [
+      "hamburguesa_doble.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Luis",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Luis",
+        "text": "No lo recomiendo"
+      },
+      {
+        "id": 3,
+        "author": "Luis",
+        "text": "Excelente calidad"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 5,
+      "username": "daniel4",
+      "email": "daniel4@mail.com"
+    }
+  },
+  {
+    "Product": "Smartphone Samsung",
+    "Description": "Galaxy S21 Ultra, 128GB",
+    "Price": 701.72,
+    "Condition": "Usado",
+    "Images": [
+      "smartphone_samsung.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Luis",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "Excelente calidad"
+      },
+      {
+        "id": 3,
+        "author": "Sofía",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Tecnología",
+    "User": {
+      "id": 6,
+      "username": "lucía5",
+      "email": "lucía5@mail.com"
+    }
+  },
+  {
+    "Product": "Clases de guitarra",
+    "Description": "Profesor con experiencia",
+    "Price": 20.91,
+    "Condition": "Nuevo",
+    "Images": [
+      "clases_de_guitarra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "No lo recomiendo"
+      },
+      {
+        "id": 2,
+        "author": "Carlos",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 3,
+        "author": "Daniel",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 7,
+      "username": "lucía6",
+      "email": "lucía6@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 9.58,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Producto defectuoso"
+      },
+      {
+        "id": 2,
+        "author": "Pedro",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 8,
+      "username": "sofía7",
+      "email": "sofía7@mail.com"
+    }
+  },
+  {
+    "Product": "Auriculares Bluetooth",
+    "Description": "Auriculares inalámbricos con micrófono",
+    "Price": 26.23,
+    "Condition": "Nuevo",
+    "Images": [
+      "auriculares_bluetooth.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Vale la pena"
+      },
+      {
+        "id": 2,
+        "author": "Pedro",
+        "text": "Vale la pena"
+      },
+      {
+        "id": 3,
+        "author": "Pedro",
+        "text": "Muy satisfecho"
+      }
+    ],
+    "Category": "Tecnología",
+    "User": {
+      "id": 9,
+      "username": "luis8",
+      "email": "luis8@mail.com"
+    }
+  },
+  {
+    "Product": "Clases de guitarra",
+    "Description": "Profesor con experiencia",
+    "Price": 24.62,
+    "Condition": "Nuevo",
+    "Images": [
+      "clases_de_guitarra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 2,
+        "author": "Pedro",
+        "text": "Llegó a tiempo"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 10,
+      "username": "daniel9",
+      "email": "daniel9@mail.com"
+    }
+  },
+  {
+    "Product": "Laptop Lenovo",
+    "Description": "Laptop ideal para estudio y oficina",
+    "Price": 506.32,
+    "Condition": "Usado",
+    "Images": [
+      "laptop_lenovo.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Tecnología",
+    "User": {
+      "id": 11,
+      "username": "lucía10",
+      "email": "lucía10@mail.com"
+    }
+  },
+  {
+    "Product": "Hamburguesa doble",
+    "Description": "Combo con papas y bebida",
+    "Price": 19.31,
+    "Condition": "Nuevo",
+    "Images": [
+      "hamburguesa_doble.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Excelente calidad"
+      },
+      {
+        "id": 2,
+        "author": "Ana",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 3,
+        "author": "Luis",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 12,
+      "username": "lucía11",
+      "email": "lucía11@mail.com"
+    }
+  },
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 81.56,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Muy satisfecho"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "Producto defectuoso"
+      },
+      {
+        "id": 3,
+        "author": "Sofía",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 13,
+      "username": "ana12",
+      "email": "ana12@mail.com"
+    }
+  },
+  {
+    "Product": "Clases de guitarra",
+    "Description": "Profesor con experiencia",
+    "Price": 16.54,
+    "Condition": "Nuevo",
+    "Images": [
+      "clases_de_guitarra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Lucía",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Ana",
+        "text": "Producto defectuoso"
+      },
+      {
+        "id": 3,
+        "author": "Ana",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 14,
+      "username": "pedro13",
+      "email": "pedro13@mail.com"
+    }
+  },
+  {
+    "Product": "Clases de guitarra",
+    "Description": "Profesor con experiencia",
+    "Price": 32.86,
+    "Condition": "Nuevo",
+    "Images": [
+      "clases_de_guitarra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 3,
+        "author": "Daniel",
+        "text": "Muy satisfecho"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 15,
+      "username": "pedro14",
+      "email": "pedro14@mail.com"
+    }
+  },
+  {
+    "Product": "Control PS5",
+    "Description": "Control original para PlayStation 5",
+    "Price": 65.03,
+    "Condition": "Nuevo",
+    "Images": [
+      "control_ps5.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Vale la pena"
+      },
+      {
+        "id": 2,
+        "author": "Carlos",
+        "text": "Muy satisfecho"
+      },
+      {
+        "id": 3,
+        "author": "Carlos",
+        "text": "No lo recomiendo"
+      }
+    ],
+    "Category": "Entretenimiento",
+    "User": {
+      "id": 16,
+      "username": "ana15",
+      "email": "ana15@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 26.23,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Laura",
+        "text": "No lo recomiendo"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 17,
+      "username": "lucía16",
+      "email": "lucía16@mail.com"
+    }
+  },
+  {
+    "Product": "Hamburguesa doble",
+    "Description": "Combo con papas y bebida",
+    "Price": 6.51,
+    "Condition": "Nuevo",
+    "Images": [
+      "hamburguesa_doble.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "No lo recomiendo"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 18,
+      "username": "lucía17",
+      "email": "lucía17@mail.com"
+    }
+  },
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 83.83,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "No lo recomiendo"
+      },
+      {
+        "id": 2,
+        "author": "Laura",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 3,
+        "author": "Ana",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 19,
+      "username": "pedro18",
+      "email": "pedro18@mail.com"
+    }
+  },
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 88.72,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Luis",
+        "text": "Excelente calidad"
+      },
+      {
+        "id": 2,
+        "author": "Carlos",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 3,
+        "author": "Luis",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 20,
+      "username": "luis19",
+      "email": "luis19@mail.com"
+    }
+  },
+  {
+    "Product": "Curso Java",
+    "Description": "Curso completo de Java con certificado",
+    "Price": 57.99,
+    "Condition": "Nuevo",
+    "Images": [
+      "curso_java.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Pedro",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 2,
+        "author": "Daniel",
+        "text": "Llegó a tiempo"
+      },
+      {
+        "id": 3,
+        "author": "Luis",
+        "text": "Llegó a tiempo"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 21,
+      "username": "sofía20",
+      "email": "sofía20@mail.com"
+    }
+  },
+  {
+    "Product": "Control PS5",
+    "Description": "Control original para PlayStation 5",
+    "Price": 69.23,
+    "Condition": "Nuevo",
+    "Images": [
+      "control_ps5.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Luis",
+        "text": "Vale la pena"
+      },
+      {
+        "id": 2,
+        "author": "Sofía",
+        "text": "No lo recomiendo"
+      },
+      {
+        "id": 3,
+        "author": "Ana",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Entretenimiento",
+    "User": {
+      "id": 22,
+      "username": "sofía21",
+      "email": "sofía21@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 21.13,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "Muy satisfecho"
+      },
+      {
+        "id": 2,
+        "author": "Daniel",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 23,
+      "username": "laura22",
+      "email": "laura22@mail.com"
+    }
+  },
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 95.03,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Carlos",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 24,
+      "username": "pedro23",
+      "email": "pedro23@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 19.96,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Pedro",
+        "text": "Muy satisfecho"
+      },
+      {
+        "id": 2,
+        "author": "Laura",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 25,
+      "username": "ana24",
+      "email": "ana24@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 11.54,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 26,
+      "username": "sofía25",
+      "email": "sofía25@mail.com"
+    }
+  },
+  {
+    "Product": "Hamburguesa doble",
+    "Description": "Combo con papas y bebida",
+    "Price": 25.59,
+    "Condition": "Nuevo",
+    "Images": [
+      "hamburguesa_doble.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Daniel",
+        "text": "Muy bueno"
+      },
+      {
+        "id": 2,
+        "author": "Ana",
+        "text": "Muy bueno"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 27,
+      "username": "ana26",
+      "email": "ana26@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 8.01,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Excelente calidad"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 28,
+      "username": "laura27",
+      "email": "laura27@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 17.48,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Luis",
+        "text": "No lo recomiendo"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 29,
+      "username": "lucía28",
+      "email": "lucía28@mail.com"
+    }
+  },
+  {
+    "Product": "Clases de guitarra",
+    "Description": "Profesor con experiencia",
+    "Price": 33.55,
+    "Condition": "Nuevo",
+    "Images": [
+      "clases_de_guitarra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Laura",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 30,
+      "username": "daniel29",
+      "email": "daniel29@mail.com"
+    }
+  },
+  {
+    "Product": "Zapatillas Nike",
+    "Description": "Zapatillas deportivas para correr",
+    "Price": 94.88,
+    "Condition": "Nuevo",
+    "Images": [
+      "zapatillas_nike.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Ana",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 31,
+      "username": "ana30",
+      "email": "ana30@mail.com"
+    }
+  },
+  {
+    "Product": "Curso Java",
+    "Description": "Curso completo de Java con certificado",
+    "Price": 76.39,
+    "Condition": "Nuevo",
+    "Images": [
+      "curso_java.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Carlos",
+        "text": "Producto defectuoso"
+      },
+      {
+        "id": 2,
+        "author": "Laura",
+        "text": "Producto defectuoso"
+      }
+    ],
+    "Category": "Servicios",
+    "User": {
+      "id": 32,
+      "username": "daniel31",
+      "email": "daniel31@mail.com"
+    }
+  },
+  {
+    "Product": "Camiseta negra",
+    "Description": "Camiseta de algodón 100% para hombre",
+    "Price": 25.06,
+    "Condition": "Nuevo",
+    "Images": [
+      "camiseta_negra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Pedro",
+        "text": "Vale la pena"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 33,
+      "username": "daniel32",
+      "email": "daniel32@mail.com"
+    }
+  },
+  {
+    "Product": "Pizza familiar",
+    "Description": "Pizza grande de pepperoni",
+    "Price": 11.4,
+    "Condition": "Nuevo",
+    "Images": [
+      "pizza_familiar.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Sofía",
+        "text": "Muy satisfecho"
+      }
+    ],
+    "Category": "Comida",
+    "User": {
+      "id": 34,
+      "username": "ana33",
+      "email": "ana33@mail.com"
+    }
+  },
+  {
+    "Product": "Camiseta negra",
+    "Description": "Camiseta de algodón 100% para hombre",
+    "Price": 20.99,
+    "Condition": "Nuevo",
+    "Images": [
+      "camiseta_negra.jpg"
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "author": "Pedro",
+        "text": "Excelente calidad"
+      },
+      {
+        "id": 2,
+        "author": "Laura",
+        "text": "Muy satisfecho"
+      }
+    ],
+    "Category": "Ropa",
+    "User": {
+      "id": 35,
+      "username": "pedro34",
+      "email": "pedro34@mail.com"
+    }
+  }
+]
