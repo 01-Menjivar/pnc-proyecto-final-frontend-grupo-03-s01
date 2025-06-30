@@ -17,7 +17,7 @@ const LoginForm = () => {
     e.preventDefault();
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
-
+    localStorage.setItem("email", email);
     setIsLoading(true);
 
     try {

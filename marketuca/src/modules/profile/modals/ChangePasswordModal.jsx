@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {AuthContext} from "../../../context/AuthContext.jsx";
+import {updatePassword} from "../services/profileService.js";
 
-const ChangePasswordModal = ({ isOpen, onClose, onSubmit }) => {
+const ChangePasswordModal = ({ isOpen, onClose }) => {
+    const { token } = useContext(AuthContext);
+
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (newPassword !== confirmPassword) {
@@ -15,12 +21,22 @@ const ChangePasswordModal = ({ isOpen, onClose, onSubmit }) => {
             return;
         }
 
-        setError("");
-        onSubmit({ currentPassword, newPassword });
-        onClose();
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+        try {
+            await updatePassword(currentPassword, newPassword, token);
+            setSuccessMessage("Contraseña actualizada correctamente.");
+            setError("");
+
+            // Limpiar y cerrar tras un pequeño delay
+            setTimeout(() => {
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                setSuccessMessage("");
+                onClose();
+            }, 1500);
+        } catch (err) {
+            setError("Error al actualizar la contraseña. Verifica tu contraseña actual.");
+        }
     };
 
     return (
@@ -67,6 +83,7 @@ const ChangePasswordModal = ({ isOpen, onClose, onSubmit }) => {
                                 />
                             </div>
                             {error && <p className="text-red-500 text-sm">{error}</p>}
+                            {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
                             <div className="flex justify-end gap-2 mt-4">
                                 <button
                                     type="button"

@@ -1,17 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext.jsx";
-import { getMyProducts } from "../services/profileService.js";
-import {Link} from "react-router-dom";
+import {
+    getProductsByEmail
+} from "../services/UserProfileService.js";
+import {Link, useParams} from "react-router-dom";
 
 const ProductGrid = () => {
     const [products, setProducts] = useState([]);
-    const { token } = useContext(AuthContext);
+    const { token, isAuthenticated } = useContext(AuthContext);
+    const {email} = useParams();
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const result = await getMyProducts(token);
+                const result = await getProductsByEmail(email,token);
                 const activeProducts = Array.isArray(result)
                     ? result.filter(p => p.active)
                     : [];
@@ -37,16 +40,23 @@ const ProductGrid = () => {
         console.log("Producto clickeado:", product);
         // Puedes redirigir o abrir un modal aquí
     };
+    if (products.length === 0) {
+        return (
+            <div className="min-h-[calc(100vh-128px)] flex items-center justify-center">
+                <p className="text-gray-500 text-lg">Este usuario no tiene productos publicados.</p>
+            </div>
+        );
+    }
 
     return (
-        <div className="relative max-w-screen-xl min-h-screen mx-auto px-4 py-8">
+        <div className="relative max-w-screen-xl  mx-auto px-4 py-8">
             <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 className="text-2xl font-bold text-gray-800 mb-6 text-center"
             >
-                Mis productos
+                Sus productos
             </motion.h2>
 
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

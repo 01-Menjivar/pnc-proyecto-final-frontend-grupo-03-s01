@@ -1,41 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {updatePhoneNumber} from "../services/profileService.js";
+import {AuthContext} from "../../../context/AuthContext.jsx";
 
-const EditUserModal = ({ isOpen, onClose, user, onSubmit }) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        role: "",
-        faculty: "",
-        number: "",
-    });
+
+const EditUserModal = ({ isOpen, onClose, user}) => {
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [error, setError] = useState("");
-
-    // Cargar datos del usuario al abrir el modal
+    const [successMessage, setSuccessMessage] = useState("");
+    const {token, isAuthenticated} = useContext(AuthContext);
     useEffect(() => {
-        if (user) {
-            setFormData(user);
+        if (user?.number) {
+            setPhoneNumber(user.number);
         }
     }, [user, isOpen]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validaciones simples
-        if (!formData.name || !formData.email || !formData.faculty || !formData.number) {
-            setError("Por favor, completa todos los campos.");
+
+        if (!phoneNumber.trim()) {
+            setError("Por favor, ingresa un número de teléfono válido.");
             return;
         }
-        setError("");
-        onSubmit(formData);
-        onClose();
+
+        try {
+            await updatePhoneNumber(phoneNumber, token);
+            setError("");
+            setSuccessMessage("Número actualizado correctamente.");
+            setTimeout(() => {
+                setSuccessMessage("");
+                onClose();
+            }, 1500);
+        } catch (err) {
+            setError("Ocurrió un error al actualizar el número.");
+        }
     };
 
     return (
@@ -49,53 +47,21 @@ const EditUserModal = ({ isOpen, onClose, user, onSubmit }) => {
                         transition={{ duration: 0.3 }}
                         className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md"
                     >
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Editar datos de usuario</h2>
+                        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Actualizar número</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-sm text-gray-600 mb-1">Nombre</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm text-gray-600 mb-1">Correo</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm text-gray-600 mb-1">Facultad</label>
-                                <input
-                                    type="text"
-                                    name="faculty"
-                                    value={formData.faculty}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                                    required
-                                />
-                            </div>
                             <div>
                                 <label className="block text-sm text-gray-600 mb-1">Número de teléfono</label>
                                 <input
                                     type="tel"
-                                    name="number"
-                                    value={formData.number}
-                                    onChange={handleChange}
+                                    name="phoneNumber"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400"
                                     required
                                 />
                             </div>
                             {error && <p className="text-red-500 text-sm">{error}</p>}
+                            {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
                             <div className="flex justify-end gap-2 mt-4">
                                 <button
                                     type="button"
@@ -108,7 +74,7 @@ const EditUserModal = ({ isOpen, onClose, user, onSubmit }) => {
                                     type="submit"
                                     className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
                                 >
-                                    Guardar cambios
+                                    Guardar
                                 </button>
                             </div>
                         </form>
