@@ -15,7 +15,9 @@
     "axios": "^1.9.0",
     "axios-mock-adapter": "^2.1.0",
     "dompurify": "^3.2.6",
-    "framer-motion": "^12.19.2",
+
+    "framer-motion": "^12.9.4",
+
     "init": "^0.1.2",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
