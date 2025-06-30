@@ -97,8 +97,7 @@ const Profile = () => {
                         <div className="pt-6">
 
                             <p className="text-gray-600 mb-4">
-                                Si deseas cambiar tus datos
-                                actuales, puedes hacerlo aquí:
+                                Si deseas cambiar tu número de contacto, puedes hacerlo aquí:
                             </p>
                             <motion.button
                                 whileTap={{scale: 0.95}}
@@ -106,7 +105,7 @@ const Profile = () => {
                                 className="self-start bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl transition"
                                 onClick={() => setShowEditModal(true)}
                             >
-                                Cambiar datos
+                                Cambiar número de contacto
                             </motion.button>
                         </div>
                     </motion.div>

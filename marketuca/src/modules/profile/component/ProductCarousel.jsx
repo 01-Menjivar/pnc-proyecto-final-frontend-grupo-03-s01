@@ -39,7 +39,7 @@ const ProductGrid = () => {
     };
 
     return (
-        <div className="relative max-w-screen-xl mx-auto px-4 py-8">
+        <div className="relative max-w-screen-xl min-h-screen mx-auto px-4 py-8">
             <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}

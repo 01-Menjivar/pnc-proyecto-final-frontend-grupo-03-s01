@@ -37,3 +37,36 @@ export const getMyProducts = async (token) => {
     // Devuelve directamente el array original de productos:
     return response.data.data; // <- aquí ya es un array
 };
+export const updatePassword = async (oldPassword, newPassword, token) => {
+    try {
+        const response = await API.patch("/user/password", {
+            oldPassword,
+            newPassword,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data; // contiene { data: "", message: "Password reset successfully" }
+    } catch (error) {
+        console.error("Error al actualizar la contraseña:", error);
+        throw error;
+    }
+};
+export const updatePhoneNumber= async (phoneNumber, token) => {
+    try {
+        const response = await API.patch("/user/phoneNumber", {
+            phoneNumber
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al actualizar la telefono:", error);
+        throw error;
+    }
+};
