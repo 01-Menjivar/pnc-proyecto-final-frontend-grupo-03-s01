@@ -5,7 +5,7 @@ import ProductCarousel from "../component/ProductCarousel.jsx";
 import { useState } from "react";
 
 
-const profile = () => {
+const UserProfile = () => {
 
     return (
         <div>
@@ -13,11 +13,13 @@ const profile = () => {
                 isAdmin={true
                 }
             />
-            <Profile/>
-            <ProductCarousel/>
+            <div className={"flex flex-row min-h-screen"}>
+                <Profile/>
+                <ProductCarousel/>
+            </div>
             <Footer />
         </div>
     )
 
 }
-export default profile;
+export default UserProfile;

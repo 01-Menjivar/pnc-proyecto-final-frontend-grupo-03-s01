@@ -96,11 +96,15 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
             <div className="mb-6">
               <h3 className="font-medium mb-2">Vendedor</h3>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#E0EEFF] flex items-center justify-center text-[#0056b3] font-bold">
-                  {product.seller ? product.seller.charAt(0) : ""}
-                </div>
+               
+                  <div
+                      className="w-10 h-10 rounded-full bg-[#E0EEFF] flex items-center justify-center text-[#0056b3] font-bold">
+                    {product.seller ? product.seller.charAt(0) : ""}
+                  </div>
+                
                 <div>
-                  <p className="font-medium">{product.seller}</p>
+                  <Link to={`/user/${product.seller}`}><p className="font-medium hover:text-blue-900 transition transform duration-150">{product.seller}</p>
+                  </Link>
                 </div>
               </div>
               <div className={"flex items-center justify-left mt-2 gap-5"}>

@@ -4,7 +4,7 @@ import ParticlesBackground from "../../utils/ParticlesBackground.jsx";
 import Whatsapp from "../../utils/ui/Whatsapp.jsx";
 import {useContext, useEffect, useState} from "react";
 import {getProductById} from "../services/productService.js";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 
 const ProductDetail = ( ) => {
@@ -100,7 +100,7 @@ const ProductDetail = ( ) => {
             <div className="relative z-20 max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-white rounded-lg shadow-lg p-6">
                 {/* Imagen del producto */}
                 <motion.div
-                    className="flex-1"
+                    className="w-full max-w-md mx-auto h-[350px] bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden"
                     initial={{ scale: 0.95 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.4 }}
@@ -108,7 +108,7 @@ const ProductDetail = ( ) => {
                     <img
                         src={product.image}
                         alt={product.title}
-                        className="w-full h-auto object-contain rounded-lg"
+                        className="w-auto h-auto object-contain rounded-lg"
                     />
                 </motion.div>
 
@@ -158,7 +158,9 @@ const ProductDetail = ( ) => {
                         transition={{ delay: 0.7 }}
                     >
                         <p><strong>Categoría:</strong> {product.category}</p>
-                        <p><strong>Vendedor:</strong> {product.seller}</p>
+                        <Link to={`/user/${product.seller}`}><h3 className={"hover:text-blue-900 hover:scale-101 transition transform duration-150"}>
+                            <strong>Vendedor:</strong> {product.seller}
+                        </h3></Link>
                         {product.phoneNumber && (
                             <p><strong>Teléfono:</strong> {product.phoneNumber}</p>
                         )}
