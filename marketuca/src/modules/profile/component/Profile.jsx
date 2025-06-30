@@ -1,17 +1,31 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { motion } from "framer-motion";
 import ParticlesBackground from "../../utils/ParticlesBackground";
 import ChangePasswordModal from "../modals/ChangePasswordModal.jsx";
 import EditUserModal from "../modals/EditUserData.jsx";
+import {AuthContext} from "../../../context/AuthContext.jsx";
+import {getUserInfo} from "../services/profileService.js";
 
 
-const Profile = ({user}) => {
-    // Simulación de usuario (en un caso real, lo traerías del contexto o API)
-
-
-//esta wea la arreglare cuando ya tengamos bien los productos
+const Profile = () => {
+    const {token, isAuthenticated} = useContext(AuthContext);
+    const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const email = localStorage.getItem("email");
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const { data } = await getUserInfo(email, token);
+                setUser(data);
+            } catch (error) {
+                console.error("Error al obtener el usuario:", error);
+            }
+        };
 
+        fetchUserInfo();
+    }, [email, token]);
+
+    if (!user) return <p>Cargando usuario...</p>;
     const handlePasswordChange = ({ currentPassword, newPassword }) => {
         // Aquí puedes hacer fetch/axios al backend
         console.log("Cambiar contraseña:", { currentPassword, newPassword });
@@ -48,13 +62,10 @@ const Profile = ({user}) => {
                                 <span className="font-medium">Correo:</span> {user.email}
                             </div>
                             <div>
-                                <span className="font-medium">Rol:</span> {user.role.toLowerCase()}
+                                <span className="font-medium">Facultad:</span> {user.facultyName}
                             </div>
                             <div>
-                                <span className="font-medium">Facultad:</span> {user.faculty}
-                            </div>
-                            <div>
-                                <span className="font-medium">Num. Telefóno: </span> {user.number}
+                                <span className="font-medium">Num. Telefóno: </span> {user.phoneNumber}
                             </div>
                         </div>
                         
