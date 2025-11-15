@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import RegisterPrompt from "./RegisterPrompt.jsx";
 import ParticlesBackground from "../../utils/ParticlesBackground.jsx";
@@ -6,12 +6,14 @@ import { loginUser } from "../service/authService.js";
 import Modal from "../../register/modal/modal.jsx";
 import LoginPreloader from "../components/LoginPreloader.jsx"; // Tu preloader adaptado
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext.jsx";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState({ title: "", message: "", isError: false });
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,6 +24,10 @@ const LoginForm = () => {
 
     try {
       const { data, message } = await loginUser({ email, password });
+      
+      // Actualizar el contexto de autenticación
+      login(data);
+      
       setModalData({
         title: "Inicio de sesión exitoso",
         message: message || "Has iniciado sesión correctamente.",

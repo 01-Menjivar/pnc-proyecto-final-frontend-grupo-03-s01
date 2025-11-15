@@ -13,7 +13,6 @@ export const loginUser = async ({ email, password }) => {
 
     if ((res.status === 200 || res.status === 201) && res.data?.data) {
       const token = res.data.data;
-      localStorage.setItem("auth_token", token);
       return {
         data: token,
         message: res.data.message || "Inicio de sesión exitoso.",

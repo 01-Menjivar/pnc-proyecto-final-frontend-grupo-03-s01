@@ -23,7 +23,6 @@ import {
   RulerIcon,
 } from "lucide-react";
 import { AuthContext } from "../../../context/AuthContext.jsx";
-import useAuth from "../../../hooks/useAuth.js";
 import {
   dislikeProduct,
   getAllProducts,
