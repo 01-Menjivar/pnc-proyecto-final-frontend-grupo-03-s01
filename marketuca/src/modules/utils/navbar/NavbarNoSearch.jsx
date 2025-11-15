@@ -12,12 +12,13 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/button.jsx";
 import { Input } from "../ui/input.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 
-const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
+const Navbar = ({   setSearchQuery,isAdmin}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const {user, isAuthenticated} = useContext(AuthContext);
+    const {user, logout} = useContext(AuthContext);
+    const navigate = useNavigate();
     const buttonVariants = {
         hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0, 86, 179, 0.2)" },
         tap: { scale: 0.95 },
@@ -50,9 +51,15 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
     };
 
     const handleLogout = () => {
-        console.log("Cerrando sesión...");
-        setIsMenuOpen(false);
-        // Aquí puedes integrar tu lógica de cierre de sesión (por ejemplo, limpiar tokens, redirigir, etc.)
+        const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");
+        if (confirmLogout) {
+            console.log("Cerrando sesión...");
+            setIsMenuOpen(false);
+            logout();
+            navigate("/");
+        } else {
+            setIsMenuOpen(false);
+        }
     };
     // Animación para el búho (solo la imagen)
     const owlVariants = {
