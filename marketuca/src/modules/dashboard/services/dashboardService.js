@@ -149,27 +149,27 @@ export const likeProduct = async (productId, token) => {
             config
         );
 
-       if(res.status === 201) return res.data;
+       if(res.status === 201 || res.status === 200) return res.data;
     }
     catch (error) {
-        console.error("Error al enviar producto:", error);
+        console.error("Error al agregar like:", error);
     }
 
 }
-export const dislikeProduct = async (productId, token) => {
+export const dislikeProduct = async (likeId, token) => {
     const config = token
         ? { headers: { Authorization: `Bearer ${token}` } }
         : undefined;
     try {
         const res = await API.delete(
-            `/likes/delete/${productId}`,
+            `/likes/delete/${likeId}`,
             config
         );
 
-        if(res.status === 202) return res.data;
+        if(res.status === 202 || res.status === 200) return res.data;
     }
     catch (error) {
-        console.error("Error al enviar producto:", error);
+        console.error("Error al eliminar like:", error);
     }
 
 }
@@ -181,12 +181,14 @@ export const getLikes = async (token) => {
     try {
         const response = await API.get(`/likes/`, config);
 
-        if (response.status === 201) {
+        // El API responde con status 200 para GET exitosos
+        if (response.status === 200 && response.data?.data) {
             return response.data.data.map((like) => ({
                 likeId: like.id,
                 productId: like.product,
             }));
         } else {
+            console.log("Respuesta de likes sin datos o status incorrecto:", response.status, response.data);
             return [];
         }
     } catch (error) {

@@ -89,10 +89,10 @@ const ProductsSection = ({
                                 <motion.div
                                     variants={heartVariants}
                                     initial="initial"
-                                    animate={favorites.includes(product.id) ? "animate" : "initial"}
+                                    animate={favorites.some((f) => f.productId === product.id) ? "animate" : "initial"}
                                 >
                                     <Heart
-                                        className={`w-5 h-5 ${favorites.includes(product.id) ? "fill-current" : ""}`}
+                                        className={`w-5 h-5 ${favorites.some((f) => f.productId === product.id) ? "fill-current" : ""}`}
                                     />
                                 </motion.div>
                             </button>

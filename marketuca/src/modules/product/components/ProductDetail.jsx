@@ -16,7 +16,6 @@ const ProductDetail = ( ) => {
 
 
 
-
     const handleContact = () => {
         // Si el phoneNumber ya incluye el +503 perfecto, si no, puedes agregarlo aquí.
         if (product.phoneNumber) {

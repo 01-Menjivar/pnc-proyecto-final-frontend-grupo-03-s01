@@ -20,9 +20,9 @@ export default function FavoritesPage() {
         setLoading(true);
         const productsData = await getAllProducts(token);
         const likesArray = await getLikes(token); // esto ya es un array
-
+        console.log("Likes obtenidos:", likesArray);
         setProducts(productsData);
-        setFavorites(likesArray.map((like) => like.productId).filter(Boolean));
+        setFavorites(likesArray); // Usar el array de objetos directamente
       } catch (error) {
         console.error("Error al obtener productos o likes:", error);
       } finally {
@@ -36,7 +36,7 @@ console.log(products);
 console.log(favorites);
   const filteredFavorites = products.filter(
       (product) =>
-          favorites.includes(product.id) &&
+          favorites.some((fav) => fav.productId === product.id) &&
           (!searchQuery || product.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 

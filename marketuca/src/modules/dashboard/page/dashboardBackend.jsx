@@ -160,7 +160,7 @@ export default function Dashboard() {
             isOpen={isProductDetailOpen}
             onClose={handleCloseProductDetail}
             onAddToCart={handleAddToCart}
-            isFavorite={favorites.includes(selectedProduct?.id)}
+            isFavorite={favorites.some((f) => f.productId === selectedProduct?.id)}
             onToggleFavorite={handleLike}
             onLike={handleLike}
             isLiking={likingProductIds.has(selectedProduct?.id)}
