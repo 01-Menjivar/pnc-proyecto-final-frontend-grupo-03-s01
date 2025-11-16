@@ -130,7 +130,7 @@ export default function Dashboard() {
     }
   };
   return (
-      <div className="relative min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <ParticlesDashboard />
         <Navbar
             cartCount={cart.length}
@@ -138,22 +138,24 @@ export default function Dashboard() {
             setSearchQuery={setSearchQuery}
             isAdmin={true}
         />
-        <HeroSection onSellClick={handleOpenSellModal} />
-        <CategoriesSection
-            categories={categories}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-        />
-        <ProductsSection
-            products={filteredProducts}
-            loading={loading}
-            onProductClick={handleProductClick}
-            favorites={favorites}
-            toggleFavorite={() => {}}
-            onLike={handleLike}
-            isLiking={likingProductIds.has(selectedProduct?.id)}
+        <main className="flex-1">
+          <HeroSection onSellClick={handleOpenSellModal} />
+          <CategoriesSection
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+          />
+          <ProductsSection
+              products={filteredProducts}
+              loading={loading}
+              onProductClick={handleProductClick}
+              favorites={favorites}
+              toggleFavorite={() => {}}
+              onLike={handleLike}
+              isLiking={likingProductIds.has(selectedProduct?.id)}
 
-        />
+          />
+        </main>
         <Footer />
         <ProductDetail
             product={selectedProduct}
