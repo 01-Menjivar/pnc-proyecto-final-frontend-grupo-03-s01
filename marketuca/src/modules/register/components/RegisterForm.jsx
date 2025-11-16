@@ -151,7 +151,7 @@ const RegisterForm = () => {
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.05 }}
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl transition-colors"
+              className="w-full bg-blue-800 hover:bg-blue-700 text-white py-2 rounded-md transition-colors cursor-pointer"
               disabled={isLoading}
             >
               Registrarse
