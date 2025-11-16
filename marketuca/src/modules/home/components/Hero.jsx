@@ -2,8 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Particles from 'react-tsparticles';
 import ParticlesBackground from "../../utils/ParticlesBackground.jsx";
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   // Variantes para animaciones de entrada
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -44,6 +47,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
+            onClick={() => navigate('/login')}
           >
             Comprar ahora
           </motion.button>
