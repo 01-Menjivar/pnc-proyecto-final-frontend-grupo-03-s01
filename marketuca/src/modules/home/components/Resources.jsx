@@ -1,33 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { IconStar, IconStarFilled } from '@tabler/icons-react';
 
 const Resources = () => {
   const resources = [
     {
       title: 'Calculadora TI CS CAS I',
-      description: '⭐⭐⭐⭐⭐ 5.0/5 Estado',
+      rating: 5,
       image: '/TI.png',
       price: '$120'
     },
     {
       title: 'Laptop HC ks344l',
-      description: '⭐⭐⭐⭐ 4.0/5 Estado',
+      rating: 4,
       image: '/laptop.png',
       price: '$95'
     },
     {
       title: 'Coleccion Santifana HB',
-      description: '⭐⭐⭐ 3.0/5 Estado',
+      rating: 3,
       image: '/linros.png',
       price: '$20'
     },
     {
       title: 'Chaqueta',
-      description: '⭐⭐⭐⭐⭐ 5.0/5 Estado',
+      rating: 5,
       image: '/jacket.webp',
       price: '$12'
     }
   ];
+
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      index < rating ? (
+        <IconStarFilled key={index} className="w-5 h-5 text-yellow-400" />
+      ) : (
+        <IconStar key={index} className="w-5 h-5 text-gray-300" />
+      )
+    ));
+  };
 
   const sectionVariants = {
     hidden: { opacity: 0, scale: 0.98 },
@@ -66,19 +77,28 @@ const Resources = () => {
 
   return (
     <motion.section
-      className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-12 z-10 relative"
+      className="px-4 sm:px-6 md:px-12 z-10 relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={sectionVariants}
     >
-      <div className="w-full max-w-screen-xl bg-blue-100 rounded-3xl p-8 sm:p-12">
+      <div className="w-full max-w-screen-xl rounded-3xl p-8 sm:p-12 mx-auto">
         <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12 font-montserrat"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 mb-3 font-montserrat"
           variants={titleVariants}
         >
-          Recursos Universitarios fácil y rápido
+          Recursos Universitarios<br />
+          <span className="bg-gradient-to-r from-blue-800 to-green-700 bg-clip-text text-transparent">fácil y rápido</span>
         </motion.h2>
+        
+        <motion.p
+          className="text-sm sm:text-base text-center text-gray-600 mb-12 max-w-2xl mx-auto font-montserrat"
+          variants={titleVariants}
+          transition={{ delay: 0.3 }}
+        >
+          Descubre nuestra amplia selección de productos. Desde tecnología hasta libros, encuentra todo lo que necesitas a los mejores precios
+        </motion.p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {resources.map((item, index) => (
@@ -92,19 +112,25 @@ const Resources = () => {
               custom={index}
               whileHover={{
                 scale: 1.05,
-                boxShadow: '0 10px 20px rgba(0, 123, 255, 0.41)',
+                boxShadow: '0 10px 20px rgba(30, 58, 138, 0.3), 0 6px 12px rgba(21, 128, 61, 0.2)',
                 transition: { duration: 0.15, ease: 'easeOut' }
               }}
-              transition={{ duration: 0.01, ease: 'easeOut' }} // más rápida la salida
+              transition={{ duration: 0.01, ease: 'easeOut' }} 
             >
               <img
                 src={item.image}
                 alt={item.title}
-                className="w-39 h-39 mb-6 object-contain"
+                className="w-32 h-32 mb-4 object-contain"
               />
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h3>
-              <p className="text-base text-gray-600 mb-4">{item.description}</p>
-              <p className="text-2xl font-bold text-gray-900">{item.price}</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">{item.title}</h3>
+              
+              <div className="flex items-center justify-center gap-1 mb-4">
+                {renderStars(item.rating)}
+              </div>
+              
+              <div className="w-full h-px bg-gray-200 mb-8"></div>
+              
+              <p className="text-2xl font-medium text-blue-600">{item.price}</p>
             </motion.div>
           ))}
         </div>

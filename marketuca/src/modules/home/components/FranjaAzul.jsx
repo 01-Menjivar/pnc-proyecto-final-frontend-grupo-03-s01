@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FranjaAzul = () => {
   return (
     <div className="w-full py-8 bg-[#007BFF] text-center z-10 relative">

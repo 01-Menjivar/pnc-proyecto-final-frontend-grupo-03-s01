@@ -68,8 +68,12 @@ const NavbarHome = () => {
                                     src="/buho.png"
                                     alt="MarketPlace UCA Logo"
                                 />
-                                <span
-                                    className="ml-3 sm:ml-4 text-2xl sm:text-4xl font-bold text-gray-900">MarketPlace UCA</span>
+                                <div className="flex flex-col ml-3 sm:ml-4 text-left">
+                                    <div className="text-2xl sm:text-4xl font-bold text-gray-900 leading-none">
+                                        MarketPlace
+                                    </div>
+                                    <div className="text-xs text-gray-600">UCA</div>
+                                </div>
                             </motion.div>
                         </Link>
                         <div className="flex items-center space-x-12 sm:space-x-16 md:space-x-16 lg:space-x-20 ml-6 sm:ml-8 md:ml-8 lg:ml-16">

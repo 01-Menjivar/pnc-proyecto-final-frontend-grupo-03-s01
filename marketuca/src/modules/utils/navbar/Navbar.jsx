@@ -98,7 +98,7 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                         />
                         { /*<img src="/buho.png" alt="Logo búho" className="w-6 h-6" />*/}
                         <span
-                            className="text-xl font-bold text-[#0056b3]">MarketPlace UCA</span>
+                            className="text-xl font-bold text-[#0056b3]">MarketPlace</span>
                     </motion.div>
                 </Link>
                 <div className="flex items-center max-w-md w-full relative">

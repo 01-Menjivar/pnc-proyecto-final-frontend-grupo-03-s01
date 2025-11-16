@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { IconBolt } from '@tabler/icons-react';
 
 const Benefits = () => {
   const sectionVariants = {
@@ -39,8 +40,9 @@ const Benefits = () => {
   };
 
   const benefits = [
-    'Conexión exclusiva entre estudiantes de la UCA',
-    'Acceso a los mejores precios',
+    'Transacciones seguras entre estudiantes UCA',
+    'Comunicación directa sin intermediarios',
+    'Acceso a miles de productos y servicios',
     'Facil de usar y seguro universitario',
     'Apoyo al emprendimiento estudiantil'
   ];
@@ -48,20 +50,54 @@ const Benefits = () => {
   return (
     <motion.section
       id="benefits"
-      className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-12 py-16 z-10 relative"
+      className="py-12 px-4 sm:px-6 md:px-12 z-10 relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
       variants={sectionVariants}
     >
-      <div className="w-full max-w-screen-xl flex flex-col md:flex-row items-center justify-between gap-12">
+      <div className="w-full max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+        
         <motion.div
-          className="w-full md:w-1/2 flex justify-start"
+          className="w-full md:w-1/2"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={titleVariants}
+        >
+          <h3 className="text-3xl md:text-4xl font-bold text-gray-900 font-montserrat mb-4">
+            <span className="text-blue-800">Beneficios</span> de ser parte de la comunidad
+          </h3>
+          
+          <p className="text-lg text-gray-600 font-montserrat mb-8">
+            Acceso exclusivo a una red segura de estudiantes verificados
+          </p>
+          
+          <ul className="space-y-4">
+            {benefits.map((benefit, index) => (
+              <motion.li
+                key={benefit}
+                className="text-lg text-gray-800 flex items-start gap-3"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={benefitVariants}
+                custom={index}
+              >
+                <IconBolt className="w-10 h-10 text-blue-400 flex-shrink-0 mt-1" />
+                <span className="font-montserrat">{benefit}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </motion.div>
+
+        <motion.div
+          className="w-full md:w-1/2 flex justify-center md:justify-end"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={benefitVariants}
-          custom={benefits.length} // Imagen como último elemento
+          custom={benefits.length}
         >
           <img
             src="/young-friends-park.jpg"
@@ -70,33 +106,7 @@ const Benefits = () => {
             loading="lazy"
           />
         </motion.div>
-        <motion.div
-          className="w-full md:w-1/2"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={titleVariants}
-        >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 font-montserrat mb-8">
-            Beneficios para estudiantes
-          </h2>
-          <ul className="space-y-6">
-            {benefits.map((benefit, index) => (
-              <motion.li
-                key={benefit}
-                className="text-2xl text-gray-800 flex items-start gap-4"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={benefitVariants}
-                custom={index}
-              >
-                <span className="text-3xl text-[#007BFF]">•</span>
-                <p>{benefit}</p>
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+        
       </div>
     </motion.section>
   );
