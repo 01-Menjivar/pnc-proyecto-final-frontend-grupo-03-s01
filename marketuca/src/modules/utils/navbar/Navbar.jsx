@@ -24,6 +24,8 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
         tap: { scale: 0.95 },
     };
 
+    const firstLetter = user?.name.charAt(0).toUpperCase();
+
     const menuVariants = {
         hidden: { opacity: 0, y: -10, scale: 0.95 },
         visible: {
@@ -96,7 +98,6 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                             src="/buho.png"
                             alt="MarketPlace UCA Logo"
                         />
-                        { /*<img src="/buho.png" alt="Logo búho" className="w-6 h-6" />*/}
                         <span
                             className="text-xl font-bold text-[#0056b3]">MarketPlace</span>
                     </motion.div>
@@ -143,11 +144,9 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                                 >
                                     {/* Perfil del usuario */}
                                     <div className="flex items-center gap-3 p-4 border-b border-gray-200">
-                                        <img
-                                            src="/placeholder.svg?height=40&width=40"
-                                            alt="User profile"
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
+                                        <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">
+                                            <span className="text-white font-bold text-lg">{firstLetter}</span>
+                                        </div>
                                         <div>
                                             <p className="font-semibold text-gray-800">{user?.name}</p>
                                             <p className="text-sm text-gray-500">{user?.role}</p>

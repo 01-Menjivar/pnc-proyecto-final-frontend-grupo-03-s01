@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import ParticlesBackground from "../../utils/ParticlesBackground.jsx";
 import { loginUser } from "../service/authService.js";
+import { getUserInfo } from "../../profile/services/profileService.js";
 import Modal from "../../register/modal/modal.jsx";
 import LoginPreloader from "../components/LoginPreloader.jsx";
 import { useNavigate } from "react-router-dom";
@@ -42,9 +43,9 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const { data, message } = await loginUser({ email, password });
-      
-      login(data);
+      const { data: token, message } = await loginUser({ email, password });
+      const { data: userData } = await getUserInfo(email, token);
+      login(token, userData);
       
       setModalData({
         title: "Inicio de sesión exitoso",
