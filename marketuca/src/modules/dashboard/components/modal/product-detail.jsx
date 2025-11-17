@@ -33,7 +33,7 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
         <div className="flex border-b border-gray-200 mb-6">
           <button
             onClick={() => setActiveTab("details")}
-            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors cursor-pointer ${
               activeTab === "details"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-gray-800"
@@ -44,7 +44,7 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
           </button>
           <button
             onClick={() => setActiveTab("comments")}
-            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors cursor-pointer ${
               activeTab === "comments"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-gray-800"
@@ -98,7 +98,19 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
               <div className="flex items-center mt-2 text-sm text-gray-600">
                 <span>Condición: {product.condition}</span>
                 <span className="mx-2">•</span>
-
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, index) => (
+                    <Star
+                      key={index}
+                      className={`w-4 h-4 ${
+                        index < Math.floor(product.rating || 4.5)
+                          ? "text-yellow-400 fill-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                  <span className="ml-1 text-sm font-medium">{(product.rating || 4.5).toFixed(1)}</span>
+                </div>
               </div>
             </div>
 
@@ -125,17 +137,18 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
                   </Link>
                 </div>
               </div>
-              <div className={"flex items-center justify-left mt-2 gap-5"}>
+              <div className={"flex items-center justify-left mt-4"}>
                 <motion.button
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3 }}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(37, 211, 102, 0.3)" }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleWhatsappClick}
-                    className={"bg-[#25D366] hover:bg-[#128C7E] transition-colors duration-150 flex gap-1 p-2 rounded-xl text-white shadow-md"}
+                    className={"bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium shadow-lg cursor-pointer hover:shadow-xl"}
                 >
-                  <Whatsapp />
-                  Contactame
+                  <Whatsapp className="w-5 h-5" />
+                  <span>Contactar por WhatsApp</span>
                 </motion.button>
               </div>
             </div>

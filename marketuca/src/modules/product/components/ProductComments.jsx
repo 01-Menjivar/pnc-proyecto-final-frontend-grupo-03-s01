@@ -71,7 +71,7 @@ const ProductComments = ({ productId, token }) => {
                     whileHover={{ scale: 1.05 }}
                     type="submit"
                     disabled={loading}
-                    className={`mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg transition ${
+                    className={`mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg transition cursor-pointer ${
                         loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
                     }`}
                 >
