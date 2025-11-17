@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Heart, MessageSquare, Share2, ShoppingCart, Star } from "lucide-react"
 import { Button } from "../../../utils/ui/button"
@@ -7,10 +5,11 @@ import { Modal } from "../modal/modal"
 import { motion } from "framer-motion"
 import Whatsapp from "../../../utils/ui/Whatsapp.jsx";
 import { Link } from "react-router-dom";
+import ProductComments from "../../../product/components/ProductComments.jsx";
 
-export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorite, onToggleFavorite, isLiking }) {
+export function ProductDetail({ product, isOpen, onClose, token }) {
   const [activeImage, setActiveImage] = useState(0)
-  const [quantity, setQuantity] = useState(1)
+  const [activeTab, setActiveTab] = useState("details") // Nueva state para las pestañas
   // Galería de imágenes: usa todas las del producto si existen
   const productImages = product?.images && product.images.length > 0
       ? product.images
@@ -19,12 +18,6 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
         "/placeholder.svg?height=200&width=200&text=Vista+frontal",
         "/placeholder.svg?height=200&width=200&text=Vista+trasera",
       ]
-  const handleQuantityChange = (amount) => {
-    const newQuantity = quantity + amount
-    if (newQuantity >= 1) {
-      setQuantity(newQuantity)
-    }
-  }
 
   const handleWhatsappClick = () => {
     const phone = "+503"+product?.phoneNumber || "77777777"
@@ -37,7 +30,32 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
 
   return (
       <Modal isOpen={isOpen} onClose={onClose} title={product.title}>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div className="flex border-b border-gray-200 mb-6">
+          <button
+            onClick={() => setActiveTab("details")}
+            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors ${
+              activeTab === "details"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            <Star className="w-4 h-4" />
+            Detalles del producto
+          </button>
+          <button
+            onClick={() => setActiveTab("comments")}
+            className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors ${
+              activeTab === "comments"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            <MessageSquare className="w-4 h-4" />
+            Comentarios
+          </button>
+        </div>
+        {activeTab === "details" ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Galería de imágenes */}
           <div>
             <div className="overflow-hidden rounded-lg bg-gray-100 mb-4">
@@ -119,17 +137,6 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
                   <Whatsapp />
                   Contactame
                 </motion.button>
-                <Link to={`/product/${product.id}`}>
-                  <motion.button
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3 }}
-                      whileHover={{ scale: 1.05 }}
-                      className={"bg-[#0056b3] hover:bg-[#339CFF] transition-colors duration-150 flex gap-1 p-2 rounded-xl text-white shadow-md font-montserrat"}
-                  >
-                    Mas detalles
-                  </motion.button>
-                </Link>
               </div>
             </div>
 
@@ -137,6 +144,11 @@ export function ProductDetail({ product, isOpen, onClose, onAddToCart, isFavorit
 
           </div>
         </div>
+        ) : (
+          <div className="max-h-96 overflow-y-auto">
+            <ProductComments productId={product.id} token={token} />
+          </div>
+        )}
       </Modal>
   )
 }

@@ -161,11 +161,7 @@ export default function Dashboard() {
             product={selectedProduct}
             isOpen={isProductDetailOpen}
             onClose={handleCloseProductDetail}
-            onAddToCart={handleAddToCart}
-            isFavorite={favorites.some((f) => f.productId === selectedProduct?.id)}
-            onToggleFavorite={handleLike}
-            onLike={handleLike}
-            isLiking={likingProductIds.has(selectedProduct?.id)}
+            token={token}
         />
         <SellProductModal
             isOpen={isSellModalOpen}

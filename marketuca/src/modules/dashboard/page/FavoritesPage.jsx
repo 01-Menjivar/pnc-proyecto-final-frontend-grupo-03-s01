@@ -86,9 +86,7 @@ console.log(favorites);
             product={selectedProduct}
             isOpen={!!selectedProduct}
             onClose={() => setSelectedProduct(null)}
-            isFavorite={true}
-            onToggleFavorite={() => {}}
-            onAddToCart={() => {}}
+            token={token}
         />
       </div>
   );
