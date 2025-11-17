@@ -14,9 +14,11 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
+import ConfirmModal from "../ui/ConfirmModal.jsx";
 
 const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
     const buttonVariants = {
@@ -53,15 +55,14 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
     };
 
     const handleLogout = () => {
-        const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");  
-        if (confirmLogout) {
-            console.log("Cerrando sesión...");
-            setIsMenuOpen(false);
-            logout();
-            navigate("/");
-        } else {
-            setIsMenuOpen(false);
-        }
+        setIsMenuOpen(false);
+        setShowConfirmLogout(true);
+    };
+
+    const confirmLogout = () => {
+        console.log("Cerrando sesión...");
+        logout();
+        navigate("/");
     };
     // Animación para el búho (solo la imagen)
     const owlVariants = {
@@ -77,6 +78,7 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
         hover: { scale: 1.05, transition: { duration: 0.3 } }
     };
     return (
+        <>
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
@@ -226,6 +228,17 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                 </div>
             </div>
         </motion.nav>
+        
+        <ConfirmModal
+            isOpen={showConfirmLogout}
+            onClose={() => setShowConfirmLogout(false)}
+            onConfirm={confirmLogout}
+            title="Cerrar sesión"
+            message="¿Estás seguro de que quieres cerrar sesión? Perderás tu sesión actual."
+            confirmText="Cerrar sesión"
+            cancelText="Cancelar"
+        />
+        </>
     );
 };
 

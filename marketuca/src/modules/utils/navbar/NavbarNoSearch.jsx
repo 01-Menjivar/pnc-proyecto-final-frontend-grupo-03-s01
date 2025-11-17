@@ -14,11 +14,15 @@ import { Button } from "../ui/button.jsx";
 import { Input } from "../ui/input.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
+import ConfirmModal from "../ui/ConfirmModal.jsx";
 
-const Navbar = ({   setSearchQuery,isAdmin}) => {
+const Navbar = ({ setSearchQuery, isAdmin }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
     const {user, logout} = useContext(AuthContext);
     const navigate = useNavigate();
+    
+    const firstLetter = user?.name?.charAt(0).toUpperCase();
     const buttonVariants = {
         hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0, 86, 179, 0.2)" },
         tap: { scale: 0.95 },
@@ -44,22 +48,15 @@ const Navbar = ({   setSearchQuery,isAdmin}) => {
         hover: { x: 5, color: "#0056b3", transition: { duration: 0.2 } },
     };
 
-    const handleSearch = (e) => {
-        if (e.key === "Enter") {
-            setSearchQuery(e.target.value.trim());
-        }
+    const handleLogout = () => {
+        setIsMenuOpen(false);
+        setShowConfirmLogout(true);
     };
 
-    const handleLogout = () => {
-        const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");
-        if (confirmLogout) {
-            console.log("Cerrando sesión...");
-            setIsMenuOpen(false);
-            logout();
-            navigate("/");
-        } else {
-            setIsMenuOpen(false);
-        }
+    const confirmLogout = () => {
+        console.log("Cerrando sesión...");
+        logout();
+        navigate("/");
     };
     // Animación para el búho (solo la imagen)
     const owlVariants = {
@@ -75,6 +72,7 @@ const Navbar = ({   setSearchQuery,isAdmin}) => {
         hover: { scale: 1.05, transition: { duration: 0.3 } }
     };
     return (
+        <>
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
@@ -133,11 +131,9 @@ const Navbar = ({   setSearchQuery,isAdmin}) => {
                                 >
                                     {/* Perfil del usuario */}
                                     <div className="flex items-center gap-3 p-4 border-b border-gray-200">
-                                        <img
-                                            src="/placeholder.svg?height=40&width=40"
-                                            alt="User profile"
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
+                                        <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">
+                                            <span className="text-white font-bold text-lg">{firstLetter}</span>
+                                        </div>
                                         <div>
                                             <p className="font-semibold text-gray-800">{user?.name}</p>
                                             <p className="text-sm text-gray-500">{user?.role}</p>
@@ -215,6 +211,17 @@ const Navbar = ({   setSearchQuery,isAdmin}) => {
                 </div>
             </div>
         </motion.nav>
+        
+        <ConfirmModal
+            isOpen={showConfirmLogout}
+            onClose={() => setShowConfirmLogout(false)}
+            onConfirm={confirmLogout}
+            title="Cerrar sesión"
+            message="¿Estás seguro de que quieres cerrar sesión? Perderás tu sesión actual."
+            confirmText="Cerrar sesión"
+            cancelText="Cancelar"
+        />
+    </>
     );
 };
 
