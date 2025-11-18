@@ -1,20 +1,20 @@
 "use client"
 
 import { useContext, useState, useRef } from "react"
-import { Upload } from "lucide-react"
+import { Upload, Package, FileText, CheckCircle, X } from "lucide-react"
 import { Button } from "../../../utils/ui/button"
 import { Input } from "../../../utils/ui/input"
-import { Modal } from "../modal/modal"
-import {
-  postProduct,
-  postProductAlternative
-} from "../../services/dashboardService.js"
 import { AuthContext } from "../../../../context/AuthContext.jsx"
+import {
+  postProduct
+} from "../../services/dashboardService.js"
 
 export function SellProductModal({ isOpen, onClose, categories }) {
-  const { token, isAuth} = useContext(AuthContext)
+  const { token } = useContext(AuthContext)
   const [images, setImages] = useState([])
   const fileInputRef = useRef(null)
+  const [currentStep, setCurrentStep] = useState(1)
+  const totalSteps = 3
 
   const [formData, setFormData] = useState({
     title: "",
@@ -23,6 +23,36 @@ export function SellProductModal({ isOpen, onClose, categories }) {
     condition: "",
     description: "",
   })
+
+  const steps = [
+    {
+      id: 1,
+      title: "Información del producto",
+      subtitle: "Agrega detalles para atraer compradores",
+      icon: Package,
+      color: "bg-[#0056b3] border-[#0056b3]",
+      bgColor: "bg-blue-50/50",
+      borderColor: "border-[#0056b3]/30"
+    },
+    {
+      id: 2,
+      title: "Descripción y fotos",
+      subtitle: "Cuéntanos qué estás vendiendo",
+      icon: FileText,
+      color: "bg-purple-600 border-purple-600",
+      bgColor: "bg-purple-50/50",
+      borderColor: "border-purple-400/30"
+    },
+    {
+      id: 3,
+      title: "Revisión final",
+      subtitle: "Verifica que todo esté correcto antes de publicar",
+      icon: CheckCircle,
+      color: "bg-green-600 border-green-600",
+      bgColor: "bg-green-50/50",
+      borderColor: "border-green-400/30"
+    }
+  ]
 
   const handleFileChange = (e) => {
     setImages(Array.from(e.target.files))
@@ -36,8 +66,20 @@ export function SellProductModal({ isOpen, onClose, categories }) {
     }))
   }
 
+  const nextStep = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
     try {
       if (!token) {
         alert("Debes iniciar sesión")
@@ -57,6 +99,7 @@ export function SellProductModal({ isOpen, onClose, categories }) {
         description: "",
       })
       setImages([])
+      setCurrentStep(1)
       if (fileInputRef.current) fileInputRef.current.value = ""
       onClose()
     } catch (err) {
@@ -65,146 +108,333 @@ export function SellProductModal({ isOpen, onClose, categories }) {
     }
   }
 
+  const validateStep = (step) => {
+    switch (step) {
+      case 1:
+        return formData.title && formData.price && formData.categoryName && formData.condition
+      case 2:
+        return formData.description && images.length > 0
+      case 3:
+        return true
+      default:
+        return false
+    }
+  }
+
+  const currentStepData = steps.find(step => step.id === currentStep)
+
+  if (!isOpen) return null
+
   return (
-      <Modal isOpen={isOpen} onClose={onClose} title="Vender un producto">
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            {/* Título */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="bg-gradient-to-r from-[#0056b3] to-[#003875] px-6 py-4">
+          <div className="flex items-center justify-between">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                Título del producto *
-              </label>
-              <Input
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  placeholder="Ej: MacBook Pro 2019"
-                  required
+              <h2 className="text-xl font-bold text-white">Vender un producto</h2>
+              <p className="text-blue-200 text-sm">Paso {currentStep} de {totalSteps}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-white hover:text-gray-300 transition-colors cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="flex gap-2 mb-6">
+            {Array.from({ length: totalSteps }, (_, index) => (
+              <div
+                key={index + 1}
+                className={`flex-1 h-2 rounded-full ${
+                  index + 1 <= currentStep ? 'bg-[#0056b3]' : 'bg-gray-300'
+                }`}
               />
-            </div>
-            {/* Precio */}
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                Precio *
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={handleChange}
-                    className="pl-7"
-                    placeholder="0.00"
-                    required
-                />
-              </div>
-            </div>
-            {/* Categoría y condición */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-                  Categoría *
-                </label>
-                <select
-                    id="categoryName"
-                    name="categoryName"
-                    value={formData.categoryName}
-                    onChange={handleChange}
-                    className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
-                    required
-                >
-                  <option value="" disabled>
-                    Selecciona una categoría
-                  </option>
-                  {categories.slice(1).map((category) => (
-                      <option key={category.id} value={category.name}>
-                        {category.name}
-                      </option>
-                  ))}
-                </select>
+            ))}
+          </div>
+          <div className={`rounded-lg border-2 p-4 mb-6 ${currentStepData.bgColor} ${currentStepData.borderColor}`}>
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${currentStepData.color} text-white`}>
+                <currentStepData.icon className="w-6 h-6" />
               </div>
               <div>
-                <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-1">
-                  Condición *
-                </label>
-                <select
+                <h3 className="font-semibold text-gray-800">{currentStepData.title}</h3>
+                <p className="text-sm text-gray-600">{currentStepData.subtitle}</p>
+              </div>
+            </div>
+          </div>
+          <form onSubmit={(e) => e.preventDefault()}>
+            {currentStep === 1 && (
+              <div className="space-y-4">
+                {/* Título */}
+                <div>
+                  <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                    Título del producto *
+                  </label>
+                  <Input
+                    id="title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    placeholder="Ej: MacBook Pro 2019"
+                    required
+                  />
+                </div>
+                
+                {/* Precio */}
+                <div>
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                    Precio *
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <Input
+                      id="price"
+                      name="price"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="pl-7"
+                      placeholder="0.00"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-1">
+                    Condición *
+                  </label>
+                  <select
                     id="condition"
                     name="condition"
                     value={formData.condition}
                     onChange={handleChange}
                     className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
                     required
-                >
-                  <option value="" disabled>
-                    Selecciona una condición
-                  </option>
-                  <option value="Nuevo">Nuevo</option>
-                  <option value="Como nuevo">Como nuevo</option>
-                  <option value="Buen estado">Buen estado</option>
-                  <option value="Usado">Usado</option>
-                  <option value="Para reparar">Para reparar</option>
-                </select>
+                  >
+                    <option value="" disabled>
+                      Selecciona una condición
+                    </option>
+                    <option value="Nuevo">Nuevo</option>
+                    <option value="Como nuevo">Como nuevo</option>
+                    <option value="Buen estado">Buen estado</option>
+                    <option value="Usado">Usado</option>
+                    <option value="Para reparar">Para reparar</option>
+                  </select>
+                </div>
+                
+                {/* Categoría */}
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                    Categoría *
+                  </label>
+                  <select
+                    id="categoryName"
+                    name="categoryName"
+                    value={formData.categoryName}
+                    onChange={handleChange}
+                    className="w-full h-10 px-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
+                    required
+                  >
+                    <option value="" disabled>
+                      Selecciona una categoría
+                    </option>
+                    {categories.slice(1).map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+            {currentStep === 2 && (
+              <div className="space-y-4">
+                {/* Descripción */}
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                    Descripción detallada *
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    rows={6}
+                    className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
+                    placeholder="Describe tu producto, incluye detalles importantes, estado, características especiales, razón de venta..."
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Fotos del producto *
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <div className="mx-auto flex justify-center">
+                      <Upload className="h-10 w-10 text-gray-400" />
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">Arrastra y suelta imágenes aquí o haz clic para seleccionar</p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      id="fileInput"
+                      className="hidden"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="mt-2"
+                      onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                    >
+                      Seleccionar imágenes
+                    </Button>
+                    {images.length > 0 && (
+                      <div className="mt-4">
+                        <p className="text-sm text-green-600 font-medium mb-2">
+                          {images.length} imagen(es) seleccionada(s)
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {images.map((img, idx) => (
+                            <div key={idx} className="relative">
+                              <img
+                                src={URL.createObjectURL(img)}
+                                alt={`Preview ${idx + 1}`}
+                                className="w-full h-20 object-cover rounded-lg"
+                              />
+                              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+                                <span className="text-white text-xs font-medium">
+                                  {img.name.length > 15 ? img.name.substring(0, 15) + '...' : img.name}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="space-y-4">
+                <div className="bg-gray-50 rounded-lg p-4 border">
+                  <h4 className="font-semibold text-gray-800 mb-4">Previsualización de tu publicación</h4>
+                  
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h5 className="font-medium text-gray-700 mb-2">Imágenes</h5>
+                      {images.length > 0 ? (
+                        <div className="grid grid-cols-2 gap-2">
+                          {images.slice(0, 4).map((img, idx) => (
+                            <img
+                              key={idx}
+                              src={URL.createObjectURL(img)}
+                              alt={`Product ${idx + 1}`}
+                              className="w-full h-24 object-cover rounded-lg border"
+                            />
+                          ))}
+                          {images.length > 4 && (
+                            <div className="w-full h-24 bg-gray-200 rounded-lg border flex items-center justify-center">
+                              <span className="text-gray-500 text-sm">+{images.length - 4} más</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="w-full h-24 bg-gray-200 rounded-lg border flex items-center justify-center">
+                          <span className="text-gray-500">Sin imágenes</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Título:</span>
+                        <p className="font-semibold text-gray-800">{formData.title || "Sin título"}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Precio:</span>
+                        <p className="text-lg font-bold text-blue-600">
+                          ${formData.price || "0.00"}
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-sm font-medium text-gray-500">Condición:</span>
+                          <p className="text-sm">{formData.condition || "No especificada"}</p>
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-gray-500">Categoría:</span>
+                          <p className="text-sm">{formData.categoryName || "No especificada"}</p>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-500">Descripción:</span>
+                        <p className="text-sm text-gray-700 mt-1">
+                          {formData.description ? 
+                            (formData.description.length > 100 ? 
+                              formData.description.substring(0, 100) + "..." : 
+                              formData.description
+                            ) : "Sin descripción"
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-6 flex justify-between">
+              <div>
+                {currentStep > 1 && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={prevStep}
+                  >
+                    Anterior
+                  </Button>
+                )}
+              </div>
+              
+              <div className="flex gap-3">
+                <Button type="button" variant="outline" onClick={onClose}>
+                  Cancelar
+                </Button>
+                
+                {currentStep < totalSteps ? (
+                  <Button 
+                    type="button" 
+                    onClick={nextStep}
+                    disabled={!validateStep(currentStep)}
+                    className="bg-[#0056b3] hover:bg-[#339CFF] text-white disabled:bg-gray-300"
+                  >
+                    Siguiente
+                  </Button>
+                ) : (
+                  <Button 
+                    type="button" 
+                    onClick={handleSubmit}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    disabled={!validateStep(currentStep)}
+                  >
+                    Publicar producto
+                  </Button>
+                )}
               </div>
             </div>
-            {/* Descripción */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Descripción
-              </label>
-              <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#339CFF]"
-                  placeholder="Describe tu producto, incluye detalles importantes..."
-              />
-            </div>
-            {/* Imágenes */}
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <div className="mx-auto flex justify-center">
-                <Upload className="h-10 w-10 text-gray-400" />
-              </div>
-              <p className="mt-2 text-sm text-gray-600">Arrastra y suelta imágenes aquí o haz clic para seleccionar</p>
-              <input
-                  ref={fileInputRef}
-                  type="file"
-                  id="fileInput"
-                  className="hidden"
-                  multiple
-                  accept="image/*"
-                  onChange={handleFileChange}
-              />
-              <Button
-                  type="button"
-                  variant="outline"
-                  className="mt-2"
-                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
-              >
-                Seleccionar imágenes
-              </Button>
-              <div className="flex flex-wrap justify-center gap-2 mt-2">
-                {images.map((img, idx) => (
-                    <span key={idx} className="text-xs text-gray-500">{img.name}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button type="submit" className="bg-[#0056b3] hover:bg-[#339CFF] text-white">
-              Publicar producto
-            </Button>
-          </div>
-        </form>
-      </Modal>
+          </form>
+        </div>
+      </div>
+    </div>
   )
 }
