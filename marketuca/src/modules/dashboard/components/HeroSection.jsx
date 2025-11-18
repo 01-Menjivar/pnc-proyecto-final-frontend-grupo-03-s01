@@ -68,13 +68,13 @@ const HeroSection = ({ onSellClick }) => {
               Vender un producto
             </motion.button>
             
-            <Link to={{pathname: "/profile"}}>
+            <Link to={{pathname: "/products"}}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-white text-blue-800 border-2 border-blue-800 px-6 py-3 rounded-lg text-base font-medium font-montserrat hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl w-fit cursor-pointer"
               >
-                Explorar mis Ventas
+                Explorar mis productos
               </motion.button>
             </Link>
           </motion.div>

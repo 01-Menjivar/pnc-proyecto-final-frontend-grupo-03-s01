@@ -1,8 +1,7 @@
 import Navbar from "../../utils/navbar/Navbar.jsx";
 import Footer from "../../utils/footer/Footer.jsx";
 import Profile from "../component/Profile.jsx";
-import ProductCarousel from "../component/ProductCarousel.jsx";
-import { useState } from "react";
+import ProductCarousel from "../../products/components/ProductCarousel.jsx";
 
 
 const profile = () => {
@@ -14,7 +13,7 @@ const profile = () => {
                 }
             />
             <Profile/>
-            <ProductCarousel/>
+            {/* <ProductCarousel/> */}
             <Footer />
         </div>
     )

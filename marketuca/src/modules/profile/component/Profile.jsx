@@ -40,7 +40,7 @@ const Profile = () => {
 
 
     return (
-        <div className="relative h-auto bg-gray-50">
+        <div className="relative min-h-screen bg-gray-50">
             <ParticlesBackground />
             <div className="relative z-10 p-8 w-screen flex flex-col items-center">
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">Perfil de usuario</h1>

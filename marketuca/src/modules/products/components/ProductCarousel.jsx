@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext.jsx";
-import { getMyProducts } from "../services/profileService.js";
+import { getMyProducts } from "../../profile/services/profileService.js";
 import {Link} from "react-router-dom";
 
 const ProductGrid = () => {

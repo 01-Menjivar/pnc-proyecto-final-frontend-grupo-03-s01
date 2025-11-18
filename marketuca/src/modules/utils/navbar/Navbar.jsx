@@ -1,8 +1,7 @@
 import {useContext, useState} from "react";
 import {
     Search,
-    ShoppingCart,
-    MessageSquare,
+    SquareChevronDown,
     Heart,
     User,
     ShoppingBag,
@@ -132,7 +131,7 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                                 className="rounded-full"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
-                                <User className="w-5 h-5 text-[#0056b3]" />
+                                <SquareChevronDown className="w-5 h-5 text-[#0056b3]" />
                             </Button>
                         </motion.div>
                         <AnimatePresence>
@@ -165,8 +164,20 @@ const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
                                                 window.location.href = "/profile"; // Recarga la página al redirigir
                                             }}
                                         >
-                                            <ShoppingBag className="w-4 h-4" />
+                                            <User className="w-4 h-4" />
                                             <span>Mi perfil</span>
+                                        </motion.div>
+                                        <motion.div
+                                            variants={menuItemVariants}
+                                            whileHover="hover"
+                                            className="flex items-center gap-2 px-4 py-2 text-gray-700 cursor-pointer"
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                window.location.href = "/products"; // Recarga la página al redirigir
+                                            }}
+                                        >
+                                            <ShoppingBag className="w-4 h-4" />
+                                            <span>Mis productos</span>
                                         </motion.div>
                                         <motion.div
                                             variants={menuItemVariants}
