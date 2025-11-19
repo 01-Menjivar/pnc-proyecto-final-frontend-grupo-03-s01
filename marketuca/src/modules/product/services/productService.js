@@ -1,4 +1,3 @@
-// src/api/productService.js
 import axios from "axios";
 
 const API = axios.create({
@@ -8,15 +7,16 @@ const API = axios.create({
     },
 });
 
-export const getProductById = async (id, token) => {
-    // Construye los headers solo si hay token
-    const config = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : undefined;
+API.interceptors.request.use((config) => {
+    const token = localStorage.getItem('auth_token'); 
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
-    const response = await API.get(`/product/${id}`, config);
-
-    // Si response.data.data es un objeto producto, no hagas map
+export const getProductById = async (id) => {
+    const response = await API.get(`/product/${id}`);
     const item = response.data.data;
 
     return {
@@ -40,12 +40,8 @@ export const getProductById = async (id, token) => {
     };
 };
 
-export const getCommentByProductId = async (id, token) => {
-    const config = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : undefined;
-
-    const response = await API.get(`/comments/product/${id}`, config);
+export const getCommentByProductId = async (id) => {
+    const response = await API.get(`/comments/product/${id}`);
     return Array.isArray(response.data.data)
         ? response.data.data.map(item => ({
             code: item.code,
@@ -55,18 +51,23 @@ export const getCommentByProductId = async (id, token) => {
         }))
         : [];
 };
-export const postComment = async (productId, comment, token) => {
-    const config = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : undefined;
 
+export const postComment = async (productId, comment) => {
     const body = {
         productId: productId,
         comment: comment,
     };
 
-    const response = await API.post('/comments/create', body, config);
-
-    // Devuelve el comentario recién creado
+    const response = await API.post('/comments/create', body);
     return response.data.data;
+};
+
+export const DeleteProductById = async (id) => {
+    const response = await API.delete(`/product/delete/${id}`);
+    return response.data;
+};
+
+export const DeleteCommentById = async (id) => {
+    const response = await API.delete(`/comments/delete/${id}`);
+    return response.data;
 };

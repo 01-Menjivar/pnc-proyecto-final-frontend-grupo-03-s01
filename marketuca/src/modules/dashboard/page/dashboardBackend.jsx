@@ -31,7 +31,8 @@ import {
 } from "../services/dashboardService.js";
 
 export default function Dashboard() {
-  const { token, isAuthenticated } = useContext(AuthContext);
+  const { token, user, isAuthenticated } = useContext(AuthContext);
+  const isAdmin = user?.role === "ADMIN";
 
   const categories = [
     { id: "all", name: "Todo", icon: <Home className="w-5 h-5" /> },
@@ -136,7 +137,7 @@ export default function Dashboard() {
             cartCount={cart.length}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            isAdmin={true}
+            isAdmin={isAdmin}
         />
         <main className="flex-1">
           <HeroSection onSellClick={handleOpenSellModal} />

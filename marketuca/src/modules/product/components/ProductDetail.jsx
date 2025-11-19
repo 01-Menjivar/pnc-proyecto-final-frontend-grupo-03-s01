@@ -2,18 +2,33 @@ import { motion } from "framer-motion";
 import ProductComments from "./ProductComments.jsx";
 import ParticlesBackground from "../../utils/ParticlesBackground.jsx";
 import Whatsapp from "../../utils/ui/Whatsapp.jsx";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState} from "react";
 import {getProductById} from "../services/productService.js";
 import {Link, useParams} from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
+import { DeleteProductById } from "../services/productService.js";
+import { Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetail = ( ) => {
     const { token, isAuthenticated } = useContext(AuthContext);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
     const {id} = useParams();
 
+    const handleDelete = async () => {
+        if (!isAuthenticated) {
+            alert("Debes estar autenticado para eliminar un producto.");
+            return;
+        }
+    
+        await DeleteProductById(id);
+        alert("Producto eliminado correctamente.");
+        navigate("/products"); 
+    }
 
 
     const handleContact = () => {
@@ -27,7 +42,7 @@ const ProductDetail = ( ) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const data = await getProductById(id, token);
+                const data = await getProductById(id);
                 setProduct(data);
             } catch (e) {
                 console.error("Error fetching product:", e);
@@ -172,11 +187,24 @@ const ProductDetail = ( ) => {
                             whileInView={{ scale: 1, y: 0 }}
                             whileHover={{ scale: 1.1 }}
                             className={
-                                "bg-[#25D366] rounded-xl hover:bg-[#128C7E] transition transition-colors duration-150 flex gap-2 p-2 items-center justify-center text-center w-auto"
+                                "bg-[#25D366] rounded-xl hover:bg-[#128C7E]  transition-colors duration-150 flex gap-2 p-2 items-center justify-center text-center w-auto"
                             }
                         >
                             <Whatsapp />
                             <span className="text-md text-gray-100">Contactame</span>
+                        </motion.button>
+
+                        <motion.button
+                            onClick={handleDelete}
+                            initial={{ scale: 1, y: 30 }}
+                            whileInView={{ scale: 1, y: 0 }}
+                            whileHover={{ scale: 1.1 }}
+                            className={
+                                "bg-red-600 rounded-xl hover:bg-red-800 transition-colors duration-150 flex gap-2 p-2 items-center justify-center text-center w-auto"
+                            }
+                        >
+                            <Trash2 />
+                            <span className="text-md text-gray-100">Eliminar</span>
                         </motion.button>
                     </div>
                 </div>
