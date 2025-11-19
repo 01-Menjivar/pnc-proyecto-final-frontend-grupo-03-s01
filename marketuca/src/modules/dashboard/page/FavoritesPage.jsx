@@ -5,6 +5,7 @@ import { getAllProducts, getLikes } from "../services/dashboardService.js";
 import Navbar from "../../utils/navbar/Navbar.jsx";
 import ParticlesDashboard from "../../utils/ui/ParticlesDashboard.jsx";
 import { ProductDetail } from "../components/modal/product-detail";
+import { IconHeartBroken } from '@tabler/icons-react';
 
 export default function FavoritesPage() {
   const { token, isAuthenticated } = useContext(AuthContext);
@@ -55,7 +56,12 @@ console.log(favorites);
           {loading && <p className="text-center">Cargando...</p>}
 
           {!loading && filteredFavorites.length === 0 && (
-              <p className="text-center text-gray-500">No tienes productos favoritos.</p>
+            <>
+            <p className="text-center text-gray-500">No tienes productos favoritos.</p>
+            <div className="flex justify-center mt-6">
+                <IconHeartBroken className="w-16 h-16 text-gray-300" />
+            </div>
+            </>
           )}
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
