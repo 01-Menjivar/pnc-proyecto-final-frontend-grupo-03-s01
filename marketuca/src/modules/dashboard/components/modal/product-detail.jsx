@@ -97,19 +97,7 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
               <p className="text-3xl font-bold text-[#0056b3] mt-2">${product.price?.toFixed(2) ?? "0.00"}</p>
               <div className="flex items-center mt-2 text-sm text-gray-600">
                 <span>Condición: {product.condition}</span>
-                <span className="mx-2">•</span>
                 <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, index) => (
-                    <Star
-                      key={index}
-                      className={`w-4 h-4 ${
-                        index < Math.floor(product.rating || 4.5)
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="ml-1 text-sm font-medium">{(product.rating || 4.5).toFixed(1)}</span>
                 </div>
               </div>
             </div>

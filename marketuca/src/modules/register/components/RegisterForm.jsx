@@ -87,7 +87,7 @@ const RegisterForm = () => {
                   required: 'El correo es requerido',
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@uca\.edu\.sv$/,
-                    message: 'Debe ser un correo de la UCA (ej: correo@uca.edu.sv)',
+                    message: 'Solo se permiten correos institucionales con terminación @uca.edu.sv',
                   },
                 })}
                 className={`w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 focus:ring-1 placeholder-gray-300 ${errors.email ? 'border-red-500' : ''}`}

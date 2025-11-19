@@ -105,8 +105,7 @@ const ProductsSection = ({
                             <div className="flex items-center justify-between mb-3">
                                 <span className="text-sm text-gray-600 font-medium">{product.seller}</span>
                                 <div className="flex items-center">
-                                    <span className="text-yellow-500 mr-1">★</span>
-                                    <span className="text-sm text-gray-600">{product.rating ?? "4.5"}</span>
+                                    <span className="text-sm text-gray-600 bg-blue-100 px-2 py-1 rounded">{product.condition}</span>
                                 </div>
                             </div>
 
