@@ -8,7 +8,7 @@ import { ProductDetail } from "../components/modal/product-detail";
 import { IconHeartBroken } from '@tabler/icons-react';
 
 export default function FavoritesPage() {
-  const { token, isAuthenticated } = useContext(AuthContext);
+  const { user, token, isAuthenticated } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ console.log(favorites);
       <div className="relative min-h-screen">
         <ParticlesDashboard />
         <Navbar
-            cartCount={0}
+            isAdmin={user?.role === 'ADMIN'}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
         />
