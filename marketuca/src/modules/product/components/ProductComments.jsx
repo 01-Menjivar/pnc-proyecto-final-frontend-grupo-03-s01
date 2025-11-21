@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import { IconTrash } from '@tabler/icons-react';
 import {
     getCommentByProductId, postComment
 } from "../services/productService.js";
+
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext.jsx";
+import { DeleteCommentById } from "../services/productService.js";
 
 // Componente que gestiona los comentarios de un producto específico.
 // Permite ver comentarios existentes y publicar nuevos, con animaciones y manejo de estados de carga.
@@ -15,6 +20,10 @@ const ProductComments = ({ productId, token }) => {
     const [loading, setLoading] = useState(false);
     // Estado para mostrar spinner al cargar los comentarios
     const [loadingComments, setLoadingComments] = useState(true);
+    // Estado para controlar qué comentario se está eliminando
+    const [deletingCommentId, setDeletingCommentId] = useState(null);
+    
+    const {user} = useContext(AuthContext);
 
     // Obtiene los comentarios del producto cada vez que cambia el productId
     useEffect(() => {
@@ -35,7 +44,7 @@ const ProductComments = ({ productId, token }) => {
     }, [productId,token]);
 
     // Maneja el envío de un nuevo comentario
-    const handleSubmit = async (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
         if (!newComment.trim() || loading) return;
         setLoading(true);
@@ -44,18 +53,33 @@ const ProductComments = ({ productId, token }) => {
             // Publica el comentario usando el servicio y lo agrega al estado local
             const newCom = await postComment(productId, newComment, token);
             const commentToAdd = {
-                code: newCom.code,
+                id: newCom.id,
                 comment: newCom.comment,
                 username: newCom.username,
+                productId: newCom.productId
             };
             setComments((prev) => [commentToAdd, ...prev]);
             setNewComment("");
-        } catch (error) {
+        } catch {
             alert("No se pudo publicar el comentario. Intenta de nuevo.");
         } finally {
             setLoading(false);
         }
-    };
+    }, [newComment, loading, productId, token]);
+
+    const handleDelete = useCallback(async (id) => {
+        console.log("Deleting comment with id:", id);
+        setDeletingCommentId(id);
+        try {
+            await DeleteCommentById(id);
+            setComments((prev) => prev.filter(comment => comment.id !== id));
+        } catch (err) {
+            console.error("Error al eliminar comentario:", err);
+            alert("No se pudo eliminar el comentario. Intenta de nuevo.");
+        } finally {
+            setDeletingCommentId(null);
+        }
+    }, []);
 
     return (
         // Contenedor principal con animación de entrada
@@ -123,14 +147,61 @@ const ProductComments = ({ productId, token }) => {
                     // Renderiza cada comentario con animación
                     comments.map((comment) => (
                         <motion.div
-                            key={comment.code}
-                            className="bg-gray-50 p-4 rounded-lg shadow"
+                            key={comment.id}
+                            className={`bg-gray-50 p-4 rounded-lg shadow transition-all ${
+                                comment.username === user?.email ? "border-l-4 border-blue-500" : ""
+                            }`}
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, type: "spring", bounce: 0.2 }}
                         >
-                            <p className="text-gray-800">{comment.comment}</p>
-                            <span className="text-sm text-gray-500">— {comment.username}</span>
+                            <p className="text-gray-800 mb-2">{comment.comment}</p>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-500">— {comment.username}</span>
+                                </div>
+                                {
+                                    comment.username === user?.email && (
+                                        <motion.button
+                                            onClick={() => handleDelete(comment.id)}
+                                            disabled={deletingCommentId === comment.id}
+                                            className={`inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all cursor-pointer ${
+                                                deletingCommentId === comment.id
+                                                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                                    : "bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700"
+                                            }`}
+                                            whileHover={deletingCommentId === comment.id ? {} : { scale: 1.05 }}
+                                            whileTap={deletingCommentId === comment.id ? {} : { scale: 0.95 }}
+                                        >
+                                            {deletingCommentId === comment.id ? (
+                                                <>
+                                                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                                        <circle
+                                                            className="opacity-25"
+                                                            cx="12"
+                                                            cy="12"
+                                                            r="10"
+                                                            stroke="currentColor"
+                                                            strokeWidth="4"
+                                                            fill="none"
+                                                        ></circle>
+                                                        <path
+                                                            className="opacity-75"
+                                                            fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8v8H4z"
+                                                        ></path>
+                                                    </svg>
+                                                    Eliminando...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <IconTrash className="h-6 w-6" stroke={1.5} />
+                                                </>
+                                            )}
+                                        </motion.button>
+                                    )
+                                }
+                            </div>
                         </motion.div>
                     ))
                 )}

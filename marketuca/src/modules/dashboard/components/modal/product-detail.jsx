@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Heart, MessageSquare, Share2, ShoppingCart, Star } from "lucide-react"
 import { Button } from "../../../utils/ui/button"
 import { Modal } from "../modal/modal"
@@ -19,12 +19,12 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
         "/placeholder.svg?height=200&width=200&text=Vista+trasera",
       ]
 
-  const handleWhatsappClick = () => {
+  const handleWhatsappClick = useCallback(() => {
     const phone = "+503"+product?.phoneNumber || "77777777"
     const message = `Hola, estoy interesado en el producto: ${product.title}. ¿Podrías darme más información?`
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
-  }
+  }, [product?.phoneNumber, product?.title])
 
   if (!product) return null
 
@@ -127,10 +127,7 @@ export function ProductDetail({ product, isOpen, onClose, token }) {
               </div>
               <div className={"flex items-center justify-left mt-4"}>
                 <motion.button
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(37, 211, 102, 0.3)" }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleWhatsappClick}
                     className={"bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium shadow-lg cursor-pointer hover:shadow-xl"}

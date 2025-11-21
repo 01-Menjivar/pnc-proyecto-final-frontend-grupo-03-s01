@@ -44,13 +44,18 @@ export const getCommentByProductId = async (id) => {
     const response = await API.get(`/comments/product/${id}`);
     return Array.isArray(response.data.data)
         ? response.data.data.map(item => ({
-            code: item.code,
+            id: item.id,
             comment: item.comment,
             username: item.username,
-            productCode: item.productCode,
+            productId: item.productId,
         }))
         : [];
 };
+
+export const getCommentsByUser = async () =>{
+    const response = await API.get('/comments/user');
+    return response.data
+}
 
 export const postComment = async (productId, comment) => {
     const body = {
