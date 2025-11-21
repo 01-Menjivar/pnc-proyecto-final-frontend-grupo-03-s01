@@ -8,7 +8,7 @@ import {Link, useParams} from "react-router-dom";
 
 const ProductGrid = () => {
     const [products, setProducts] = useState([]);
-    const { token, isAuthenticated } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const {email} = useParams();
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const ProductGrid = () => {
         };
 
         fetchProducts();
-    }, [token]);
+    }, [token,email]);
 
     const productVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -36,10 +36,7 @@ const ProductGrid = () => {
         },
     };
 
-    const handleProductClick = (product) => {
-        console.log("Producto clickeado:", product);
-        // Puedes redirigir o abrir un modal aquí
-    };
+
     if (products.length === 0) {
         return (
             <div className="min-h-[calc(100vh-128px)] flex items-center justify-center">
@@ -74,7 +71,6 @@ const ProductGrid = () => {
                                 boxShadow: "0 10px 20px rgba(0, 86, 179, 0.15)",
                                 borderColor: "#339CFF",
                             }}
-                            onClick={() => handleProductClick(product)}
                         >
                             <div
                                 className="relative overflow-hidden aspect-square">

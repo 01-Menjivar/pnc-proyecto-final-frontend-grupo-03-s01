@@ -63,8 +63,8 @@ const AcademicInfoStep = ({ formDataStored = {}, onSubmit, onPrevious }) => {
       </div>
 
       <div className="flex justify-between mt-6">
-        <button type="button" onClick={onPrevious} className="text-gray-600 hover:text-gray-800 px-4 py-2 transition-colors">← Anterior</button>
-        <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">Continuar</button>
+        <button type="button" onClick={onPrevious} className="text-gray-600 hover:text-gray-800 px-4 py-2 transition-colors cursor-pointer">← Anterior</button>
+        <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">Continuar</button>
       </div>
     </form>
   );

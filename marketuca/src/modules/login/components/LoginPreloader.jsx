@@ -66,7 +66,7 @@ const LoginPreloader = ({ onComplete = () => { } }) => {
 
             return () => clearInterval(progressInterval);
         }
-    }, [currentStep]);
+    }, [currentStep, onComplete]);
 
 
     const SecurityParticle = ({ delay = 0 }) => (

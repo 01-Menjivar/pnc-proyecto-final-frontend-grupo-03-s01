@@ -4,16 +4,24 @@ import {
     getCommentByProductId, postComment
 } from "../services/productService.js";
 
+// Componente que gestiona los comentarios de un producto específico.
+// Permite ver comentarios existentes y publicar nuevos, con animaciones y manejo de estados de carga.
 const ProductComments = ({ productId, token }) => {
+    // Estado para la lista de comentarios obtenidos del backend
     const [comments, setComments] = useState([]);
+    // Estado para el texto del nuevo comentario a publicar
     const [newComment, setNewComment] = useState("");
+    // Estado para mostrar spinner al publicar un comentario
     const [loading, setLoading] = useState(false);
+    // Estado para mostrar spinner al cargar los comentarios
     const [loadingComments, setLoadingComments] = useState(true);
 
+    // Obtiene los comentarios del producto cada vez que cambia el productId
     useEffect(() => {
         const fetchComments = async () => {
             setLoadingComments(true);
             try {
+                // Llama al servicio para obtener comentarios por producto
                 const data = await getCommentByProductId(productId, token);
                 setComments(data);
             } catch (e) {
@@ -24,14 +32,16 @@ const ProductComments = ({ productId, token }) => {
             }
         };
         fetchComments();
-    }, [productId]);
+    }, [productId,token]);
 
+    // Maneja el envío de un nuevo comentario
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!newComment.trim() || loading) return;
         setLoading(true);
 
         try {
+            // Publica el comentario usando el servicio y lo agrega al estado local
             const newCom = await postComment(productId, newComment, token);
             const commentToAdd = {
                 code: newCom.code,
@@ -40,7 +50,7 @@ const ProductComments = ({ productId, token }) => {
             };
             setComments((prev) => [commentToAdd, ...prev]);
             setNewComment("");
-        } catch (err) {
+        } catch (error) {
             alert("No se pudo publicar el comentario. Intenta de nuevo.");
         } finally {
             setLoading(false);
@@ -48,6 +58,7 @@ const ProductComments = ({ productId, token }) => {
     };
 
     return (
+        // Contenedor principal con animación de entrada
         <motion.div
             className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-xl shadow relative z-20"
             initial={{ opacity: 0, y: 30 }}
@@ -56,7 +67,7 @@ const ProductComments = ({ productId, token }) => {
         >
             <h2 className="text-xl font-bold mb-4">Comentarios</h2>
 
-            {/* Formulario */}
+            {/* Formulario para publicar un nuevo comentario */}
             <form onSubmit={handleSubmit} className="mb-6">
                 <textarea
                     className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring"
@@ -79,9 +90,10 @@ const ProductComments = ({ productId, token }) => {
                 </motion.button>
             </form>
 
-            {/* Comentarios */}
+            {/* Listado de comentarios existentes */}
             <div className="max-h-64 overflow-y-auto space-y-4 pr-2">
                 {loadingComments ? (
+                    // Spinner y mensaje mientras se cargan los comentarios
                     <motion.div
                         className="flex justify-center text-blue-600 py-10"
                         initial={{ opacity: 0 }}
@@ -108,6 +120,7 @@ const ProductComments = ({ productId, token }) => {
                 ) : comments.length === 0 ? (
                     <p className="text-gray-500">Aún no hay comentarios.</p>
                 ) : (
+                    // Renderiza cada comentario con animación
                     comments.map((comment) => (
                         <motion.div
                             key={comment.code}

@@ -12,13 +12,8 @@ import {
   Briefcase,
   Coffee,
   Gamepad2,
-  Heart,
   Home,
   Laptop,
-  MessageSquare,
-  ShoppingBag,
-  ShoppingCart,
-  User,
   ShirtIcon,
   RulerIcon,
 } from "lucide-react";
@@ -100,7 +95,6 @@ export default function Dashboard() {
 
   const handleOpenSellModal = () => setIsSellModalOpen(true);
   const handleCloseSellModal = () => setIsSellModalOpen(false);
-  const handleAddToCart = (product) => setCart((prev) => [...prev, product]);
 
   const handleLike = async (productId) => {
     if (likingProductIds.has(productId)) return; // Evita múltiples clics simultáneos

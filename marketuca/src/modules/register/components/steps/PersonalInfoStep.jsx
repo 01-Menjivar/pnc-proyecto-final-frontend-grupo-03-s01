@@ -76,7 +76,7 @@ const PersonalInfoStep = ({ formDataStored, onSubmit }) => {
       <div className="flex justify-end mt-6">
         <button
           type="submit"
-          className="bg-[#0056b3] hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          className="bg-[#0056b3] hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer"
         >
           Continuar
         </button>

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { motion } from "framer-motion";
 import ParticlesBackground from "../../utils/ParticlesBackground";
 import {AuthContext} from "../../../context/AuthContext.jsx";
@@ -6,9 +6,8 @@ import {useParams} from "react-router-dom";
 import {getUserInfo} from "../services/UserProfileService.js";
 
 
-
 const Profile = () => {
-    const {token, isAuthenticated} = useContext(AuthContext);
+    const {token} = useContext(AuthContext);
     const [user, setUser] = useState({});
     const { email } = useParams();
 
@@ -58,10 +57,6 @@ const Profile = () => {
                         </div>
                         
                     </motion.div>
-
-
-                    
-
                 </div>
             </div>
 

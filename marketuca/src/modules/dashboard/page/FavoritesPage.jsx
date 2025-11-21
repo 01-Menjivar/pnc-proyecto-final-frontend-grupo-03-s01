@@ -20,7 +20,7 @@ export default function FavoritesPage() {
       try {
         setLoading(true);
         const productsData = await getAllProducts(token);
-        const likesArray = await getLikes(token); // esto ya es un array
+        const likesArray = await getLikes(token); 
         console.log("Likes obtenidos:", likesArray);
         setProducts(productsData);
         setFavorites(likesArray); // Usar el array de objetos directamente
@@ -33,8 +33,6 @@ export default function FavoritesPage() {
 
     if (isAuthenticated) fetchData();
   }, [isAuthenticated, token]);
-console.log(products);
-console.log(favorites);
   const filteredFavorites = products.filter(
       (product) =>
           favorites.some((fav) => fav.productId === product.id) &&
