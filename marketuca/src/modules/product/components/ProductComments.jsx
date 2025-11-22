@@ -62,7 +62,7 @@ const ProductCommentsContent = ({ productId, token }) => {
     return (
         // Contenedor principal con animación de entrada
         <motion.div
-            className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-xl shadow relative z-20"
+            className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow relative z-20"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
