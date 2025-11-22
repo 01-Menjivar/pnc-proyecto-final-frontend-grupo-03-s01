@@ -1,24 +1,28 @@
 import { useEffect, useState, useCallback, useContext } from "react";
 import { motion } from "framer-motion";
-import { getCommentByProductId, postComment } from "../services/productService.js";
+import { getCommentByProductId, postComment, getRelevantCommentsByProductId } from "../services/productService.js";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import { CommentsProvider, useCommentsContext } from "../context/CommentsContext.jsx";
 import { CommentItem } from "./CommentItem.jsx";
+import { CommentFilter } from "./CommentFilter.jsx";
 
 // Componente interno que contiene la lógica de comentarios
 const ProductCommentsContent = ({ productId, token }) => {
     const [newComment, setNewComment] = useState("");
     const [loading, setLoading] = useState(false);
     const [loadingComments, setLoadingComments] = useState(true);
+    const [activeFilter, setActiveFilter] = useState('all');
     
     const { comments, setComments, setRepliesMap } = useCommentsContext();
 
-    // Obtiene los comentarios del producto cada vez que cambia el productId
+    // Obtiene los comentarios del producto cada vez que cambia el productId o el filtro
     useEffect(() => {
         const fetchComments = async () => {
             setLoadingComments(true);
             try {
-                const data = await getCommentByProductId(productId, token);
+                const data = activeFilter === 'relevant' 
+                    ? await getRelevantCommentsByProductId(productId)
+                    : await getCommentByProductId(productId, token);
                 setComments(data);
                 setRepliesMap({});
             } catch (e) {
@@ -29,7 +33,7 @@ const ProductCommentsContent = ({ productId, token }) => {
             }
         };
         fetchComments();
-    }, [productId, token, setComments, setRepliesMap]);
+    }, [productId, token, activeFilter, setComments, setRepliesMap]);
 
     // Maneja el envío de un nuevo comentario
     const handleSubmit = useCallback(async (e) => {
@@ -65,7 +69,11 @@ const ProductCommentsContent = ({ productId, token }) => {
         >
             <h2 className="text-xl font-bold mb-4">Comentarios</h2>
 
-            {/* Formulario para publicar un nuevo comentario */}
+            <CommentFilter 
+                activeFilter={activeFilter} 
+                onFilterChange={setActiveFilter} 
+            />
+
             <form onSubmit={handleSubmit} className="mb-6">
                 <textarea
                     className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring"
@@ -88,7 +96,6 @@ const ProductCommentsContent = ({ productId, token }) => {
                 </motion.button>
             </form>
 
-            {/* Listado de comentarios existentes */}
             <div className="max-h-64 overflow-y-auto space-y-4 pr-2">
                 {loadingComments ? (
                     // Spinner y mensaje mientras se cargan los comentarios

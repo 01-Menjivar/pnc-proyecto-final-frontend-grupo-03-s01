@@ -104,6 +104,11 @@ export const replyComment = async (commentIdtoReply, comment) => {
         return response.data.data;
     }
 
+    export const getRelevantCommentsByProductId = async (productId) => {
+        const response = await API.get(`/comments/product/relevance/${productId}`);
+        return response.data.data;
+    }
+
 export const DeleteProductById = async (id) => {
     const response = await API.delete(`/product/delete/${id}`);
     return response.data;
