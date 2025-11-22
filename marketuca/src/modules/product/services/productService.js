@@ -98,15 +98,12 @@ export const replyComment = async (commentIdtoReply, comment) => {
 
     }
 
-    export const updateCommentById = async (id, updatedComment) => {
-        const body = {
-            productId: id,
-            comment: updatedComment
-        }
-        
-        await API.patch(`/comments/update/`, body);
-                
+    export const updateCommentById = async (id, comment) => {
+        const body = {id,comment}
+        const response = await API.patch(`/comments/update`, body);
+        return response.data.data;
     }
+
 export const DeleteProductById = async (id) => {
     const response = await API.delete(`/product/delete/${id}`);
     return response.data;

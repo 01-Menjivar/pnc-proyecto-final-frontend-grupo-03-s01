@@ -1,28 +1,34 @@
 
 import { motion, AnimatePresence } from "framer-motion";
-import { IconTrash, IconMessageReply, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconTrash, IconMessageReply, IconChevronDown, IconChevronUp, IconEdit } from '@tabler/icons-react';
+import { useCommentsContext } from '../context/CommentsContext.jsx';
 
-export const CommentItem = ({ 
-    comment, 
-    user, 
-    deletingCommentId, 
-    handleDelete, 
-    replyingToId, 
-    replyText, 
-    setReplyText, 
-    handleReplyClick, 
-    handleReplySubmit,
-    expandedReplies,
-    toggleReplies,
-    repliesMap,
-    loadingReplies,
-    depth = 0 
-}) => {
+export const CommentItem = ({ comment, depth = 0 }) => {
+    const {
+        user,
+        deletingCommentId,
+        handleDelete,
+        replyingToId,
+        replyText,
+        setReplyText,
+        handleReplyClick,
+        handleReplySubmit,
+        expandedReplies,
+        toggleReplies,
+        repliesMap,
+        loadingReplies,
+        editingCommentId,
+        editText,
+        setEditText,
+        handleEditClick,
+        handleEditSubmit,
+    } = useCommentsContext();
     const replies = repliesMap[comment.id] || [];
     const hasReplies = (comment.responseCount && comment.responseCount > 0) || replies.length > 0;
     const isExpanded = expandedReplies[comment.id];
     const isReplying = replyingToId === comment.id;
     const isLoadingReplies = loadingReplies[comment.id];
+    const isEditing = editingCommentId === comment.id;
 
     return (
         <motion.div
@@ -36,7 +42,33 @@ export const CommentItem = ({
                     comment.username === user?.email ? "border-l-4 border-blue-500" : ""
                 } ${depth > 0 ? "ml-8 border-l-2 border-gray-200" : ""}`}
             >
-                <p className="text-gray-800 mb-2">{comment.comment}</p>
+                {isEditing ? (
+                    <div className="mb-2">
+                        <textarea
+                            className="w-full p-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring text-sm"
+                            rows="3"
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            autoFocus
+                        />
+                        <div className="flex gap-2 mt-2">
+                            <button
+                                onClick={() => handleEditSubmit(comment.id)}
+                                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 cursor-pointer"
+                            >
+                                Guardar
+                            </button>
+                            <button
+                                onClick={() => handleEditClick(null)}
+                                className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300 cursor-pointer"
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-gray-800 mb-2">{comment.comment}</p>
+                )}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <span className="text-sm text-gray-500">— {comment.username}</span>
@@ -71,18 +103,27 @@ export const CommentItem = ({
                         )}
                     </div>
 
-                    {comment.username === user?.email && (
-                        <motion.button
-                            onClick={() => handleDelete(comment.id)}
-                            disabled={deletingCommentId === comment.id}
-                            className={`inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all cursor-pointer ${
-                                deletingCommentId === comment.id
-                                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                    : "bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700"
-                            }`}
-                            whileHover={deletingCommentId === comment.id ? {} : { scale: 1.05 }}
-                            whileTap={deletingCommentId === comment.id ? {} : { scale: 0.95 }}
-                        >
+                    {comment.username === user?.email && !isEditing && (
+                        <div className="flex gap-2">
+                            <motion.button
+                                onClick={() => handleEditClick(comment)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all cursor-pointer bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <IconEdit className="h-4 w-4" stroke={1.5} />
+                            </motion.button>
+                            <motion.button
+                                onClick={() => handleDelete(comment.id)}
+                                disabled={deletingCommentId === comment.id}
+                                className={`inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all cursor-pointer ${
+                                    deletingCommentId === comment.id
+                                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                        : "bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700"
+                                }`}
+                                whileHover={deletingCommentId === comment.id ? {} : { scale: 1.05 }}
+                                whileTap={deletingCommentId === comment.id ? {} : { scale: 0.95 }}
+                            >
                             {deletingCommentId === comment.id ? (
                                 <>
                                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
@@ -107,6 +148,7 @@ export const CommentItem = ({
                                 <IconTrash className="h-4 w-4" stroke={1.5} />
                             )}
                         </motion.button>
+                        </div>
                     )}
                 </div>
             </div>
@@ -182,18 +224,6 @@ export const CommentItem = ({
                                 <CommentItem
                                     key={reply.id}
                                     comment={reply}
-                                    user={user}
-                                    deletingCommentId={deletingCommentId}
-                                    handleDelete={handleDelete}
-                                    replyingToId={replyingToId}
-                                    replyText={replyText}
-                                    setReplyText={setReplyText}
-                                    handleReplyClick={handleReplyClick}
-                                    handleReplySubmit={handleReplySubmit}
-                                    expandedReplies={expandedReplies}
-                                    toggleReplies={toggleReplies}
-                                    repliesMap={repliesMap}
-                                    loadingReplies={loadingReplies}
                                     depth={depth + 1}
                                 />
                             ))
