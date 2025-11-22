@@ -48,6 +48,10 @@ export const getCommentByProductId = async (id) => {
             comment: item.comment,
             username: item.username,
             productId: item.productId,
+            parentId: item.parentId,
+            responseCount: item.responseCount || 0,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
         }))
         : [];
 };
@@ -57,16 +61,52 @@ export const getCommentsByUser = async () =>{
     return response.data
 }
 
+export const getCommentReplies = async (commentId) => {
+    const response = await API.get(`/comments/responses/${commentId}`);
+    return Array.isArray(response.data.data)
+        ? response.data.data.map(item => ({
+            id: item.id,
+            comment: item.comment,
+            username: item.username,
+            productId: item.productId,
+            parentId: item.parentId,
+            responseCount: item.responseCount || 0,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+        }))
+        : [];
+};
+
 export const postComment = async (productId, comment) => {
     const body = {
         productId: productId,
         comment: comment,
     };
-
     const response = await API.post('/comments/create', body);
     return response.data.data;
 };
 
+
+export const replyComment = async (commentIdtoReply, comment) => {
+        const body = {
+            commentIdToReply: commentIdtoReply,
+            comment: comment
+            }
+
+        const response = await API.post('/comments/reply', body);
+        return response.data.data;
+
+    }
+
+    export const updateCommentById = async (id, updatedComment) => {
+        const body = {
+            productId: id,
+            comment: updatedComment
+        }
+        
+        await API.patch(`/comments/update/`, body);
+                
+    }
 export const DeleteProductById = async (id) => {
     const response = await API.delete(`/product/delete/${id}`);
     return response.data;
