@@ -16,9 +16,10 @@ const UserProfile = () => {
                 isAdmin={user?.role === "ADMIN"
                 }
             />
-            <div className={"flex flex-row min-h-screen"}>
-                <Profile/>
-                <ProductCarousel/>
+            <div className="flex justify-center px-4 py-8 min-h-screen bg-gray-50">
+                <div className="w-full max-w-6xl">
+                    <Profile/>
+                </div>
             </div>
             <Footer />
         </div>

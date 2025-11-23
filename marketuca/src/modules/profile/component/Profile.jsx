@@ -1,20 +1,29 @@
 import React, {useContext, useEffect, useState} from "react";
-import { motion } from "framer-motion";
-import { User, Mail, Phone, Book, Lock, Smartphone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Mail, Phone, Book, Lock, Smartphone, Star, MessageCircle, Edit, Trash2 } from "lucide-react";
 import ParticlesBackground from "../../utils/ParticlesBackground";
 import ChangePasswordModal from "../modals/ChangePasswordModal.jsx";
 import EditUserModal from "../modals/EditUserData.jsx";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 import {getUserInfo} from "../services/profileService.js";
+import { 
+    getReviewsBySellerEmail, 
+    deleteReviewById, 
+    updateReviewById
+} from "../services/profileService.js";
 
 
 const Profile = () => {
     const {token} = useContext(AuthContext);
     const [user, setUser] = useState({});
+    const [reviews, setReviews] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [activeTab, setActiveTab] = useState("info"); // 'info' | 'config'
+    const [activeTab, setActiveTab] = useState("info"); // 'info' | 'config' | 'reviews'
     const [showEditModal, setShowEditModal] = useState(false);
     const [userData, setUserData] = useState({});
+    const [editingReviewId, setEditingReviewId] = useState(null);
+    const [editText, setEditText] = useState("");
+    const [editRating, setEditRating] = useState(5);
     const email = localStorage.getItem("email");
     
     useEffect(() => {
@@ -31,17 +40,77 @@ const Profile = () => {
         fetchUserInfo();
     }, [email, token]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const sellerReviews = await getReviewsBySellerEmail(email);
+                setReviews(sellerReviews);
+            } catch (error) {
+                console.error("Error al obtener reseñas:", error);
+            }
+        };
+
+        if (activeTab === "reviews") {
+            fetchReviews();
+        }
+    }, [email, activeTab]);
+
+    const handleDeleteReview = async (reviewId) => {
+        try {
+            await deleteReviewById(reviewId);
+            setReviews(reviews.filter(r => r.id !== reviewId));
+        } catch (error) {
+            console.error("Error al eliminar reseña:", error);
+            alert("No se pudo eliminar la reseña.");
+        }
+    };
+
+    const handleEditClick = (review) => {
+        setEditingReviewId(review.id);
+        setEditText(review.comment);
+        setEditRating(review.rating);
+    };
+
+    const handleUpdateReview = async (reviewId) => {
+        if (!editText.trim()) return;
+        
+        try {
+            const updated = await updateReviewById(email, reviewId, editRating, editText);
+            setReviews(reviews.map(r => r.id === reviewId ? updated : r));
+            setEditingReviewId(null);
+            setEditText("");
+            setEditRating(5);
+        } catch (error) {
+            console.error("Error al actualizar reseña:", error);
+            alert("No se pudo actualizar la reseña.");
+        }
+    };
+
+    const calculateAverageRating = () => {
+        if (reviews.length === 0) return 0;
+        const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+        return (sum / reviews.length).toFixed(1);
+    };
+
+    const renderStars = (rating, interactive = false, onRatingChange = null) => {
+        return (
+            <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                        key={star}
+                        className={`w-5 h-5 ${
+                            star <= rating 
+                                ? "fill-yellow-400 text-yellow-400" 
+                                : "text-gray-300"
+                        } ${interactive ? "cursor-pointer" : ""}`}
+                        onClick={() => interactive && onRatingChange && onRatingChange(star)}
+                    />
+                ))}
+            </div>
+        );
+    };
+
     if (!user) return <p>Cargando usuario...</p>;
-    
-    const handlePasswordChange = ({ currentPassword, newPassword }) => {
-        // Aquí puedes hacer fetch/axios al backend
-        console.log("Cambiar contraseña:", { currentPassword, newPassword });
-    };
-
-    const handleEditSubmit = (newData) => {
-        setUserData(newData); // aquí podrías hacer también la llamada a tu API
-    };
-
 
     return (
         <div className="relative min-h-screen bg-gray-50">
@@ -91,6 +160,17 @@ const Profile = () => {
                             >
                                 <Lock className="w-4 h-4" />
                                 Configuración
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("reviews")}
+                                className={`flex items-center gap-2 px-4 py-2 font-medium transition-colors cursor-pointer ${
+                                    activeTab === "reviews"
+                                        ? "text-blue-600 border-b-2 border-blue-600"
+                                        : "text-gray-600 hover:text-gray-800"
+                                }`}
+                            >
+                                <MessageCircle className="w-4 h-4" />
+                                Reseñas
                             </button>
                         </div>
 
@@ -181,19 +261,140 @@ const Profile = () => {
                                 </button>
                             </motion.div>
                         )}
+
+                        {activeTab === "reviews" && (
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="min-h-[450px]"
+                            >
+                                <div className="mb-6">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <Star className="w-6 h-6 text-yellow-400 fill-yellow-400" />
+                                        <div>
+                                            <p className="text-2xl font-bold text-gray-800">
+                                                {calculateAverageRating()}
+                                            </p>
+                                            <p className="text-sm text-gray-500">
+                                                {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <AnimatePresence mode="wait">
+                                    {reviews.length === 0 ? (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="text-center py-12 text-gray-500"
+                                        >
+                                            <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                                            <p>Aún no has recibido reseñas</p>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="space-y-4"
+                                        >
+                                            {reviews.map((review) => {
+                                                const currentUserEmail = localStorage.getItem("email");
+                                                const isOwner = review.reviewerEmail === currentUserEmail;
+
+                                                return (
+                                                    <div
+                                                        key={review.id}
+                                                        className="bg-gray-50 p-4 rounded-lg border border-gray-200"
+                                                    >
+                                                        <div className="flex items-start justify-between mb-2">
+                                                            <div>
+                                                                <p className="font-semibold text-gray-800">
+                                                                    {review.reviewerUsername}
+                                                                </p>
+                                                                <div className="flex items-center gap-2 mt-1">
+                                                                    {editingReviewId === review.id ? (
+                                                                        renderStars(editRating, true, setEditRating)
+                                                                    ) : (
+                                                                        renderStars(review.rating)
+                                                                    )}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        {new Date(review.createdAt).toLocaleDateString()}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            {isOwner && (
+                                                                <div className="flex gap-2">
+                                                                    {editingReviewId === review.id ? (
+                                                                        <>
+                                                                            <button
+                                                                                onClick={() => handleUpdateReview(review.id)}
+                                                                                className="text-green-600 hover:text-green-700"
+                                                                            >
+                                                                                Guardar
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    setEditingReviewId(null);
+                                                                                    setEditText("");
+                                                                                    setEditRating(5);
+                                                                                }}
+                                                                                className="text-gray-600 hover:text-gray-700"
+                                                                            >
+                                                                                Cancelar
+                                                                            </button>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <button
+                                                                                onClick={() => handleEditClick(review)}
+                                                                                className="text-blue-600 hover:text-blue-700"
+                                                                            >
+                                                                                <Edit className="w-4 h-4" />
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => handleDeleteReview(review.id)}
+                                                                                className="text-red-600 hover:text-red-700"
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </button>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        {editingReviewId === review.id ? (
+                                                            <textarea
+                                                                value={editText}
+                                                                onChange={(e) => setEditText(e.target.value)}
+                                                                className="w-full p-2 border border-gray-300 rounded-lg mt-2"
+                                                                rows="3"
+                                                            />
+                                                        ) : (
+                                                            <p className="text-gray-700 mt-2">{review.comment}</p>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+                        )}
                     </motion.div>
                 </div>
             </div>
             <ChangePasswordModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                onSubmit={handlePasswordChange}
             />
             <EditUserModal
                 isOpen={showEditModal}
                 onClose={() => setShowEditModal(false)}
                 user={userData}
-                onSubmit={handleEditSubmit}
             />
         </div>
     );
