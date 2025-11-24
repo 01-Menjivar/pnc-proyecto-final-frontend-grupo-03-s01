@@ -1,8 +1,7 @@
 import {useContext, useState} from "react";
 import {
     Search,
-    ShoppingCart,
-    MessageSquare,
+    SquareChevronDown,
     Heart,
     User,
     ShoppingBag,
@@ -12,16 +11,28 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {AuthContext} from "../../../context/AuthContext.jsx";
+import ConfirmModal from "../ui/ConfirmModal.jsx";
 
-const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
+// Componente principal de la barra de navegación superior.
+// Incluye búsqueda, menú de usuario, animaciones y lógica de cierre de sesión.
+const Navbar = ({ searchQuery, setSearchQuery, isAdmin}) => {
+    // Estado para mostrar/ocultar el menú desplegable de usuario.
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const {user, isAuthenticated} = useContext(AuthContext);
+    // Estado para mostrar el modal de confirmación de cierre de sesión.
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+    // Contexto de autenticación: contiene el usuario actual y la función de logout.
+    const {user, logout} = useContext(AuthContext);
+    // Hook de navegación para redirecciones.
+    const navigate = useNavigate();
     const buttonVariants = {
         hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0, 86, 179, 0.2)" },
         tap: { scale: 0.95 },
     };
+
+    // Obtiene la primera letra del nombre del usuario para el avatar.
+    const firstLetter = user?.name.charAt(0).toUpperCase();
 
     const menuVariants = {
         hidden: { opacity: 0, y: -10, scale: 0.95 },
@@ -43,18 +54,27 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
         hover: { x: 5, color: "#0056b3", transition: { duration: 0.2 } },
     };
 
+    // Permite buscar productos desde el input. Solo actualiza la búsqueda al presionar Enter.
     const handleSearch = (e) => {
         if (e.key === "Enter") {
             setSearchQuery(e.target.value.trim());
         }
     };
 
+    // Muestra el modal de confirmación antes de cerrar sesión.
     const handleLogout = () => {
-        console.log("Cerrando sesión...");
         setIsMenuOpen(false);
-        // Aquí puedes integrar tu lógica de cierre de sesión (por ejemplo, limpiar tokens, redirigir, etc.)
+        setShowConfirmLogout(true);
+    };
+
+    // Ejecuta el cierre de sesión y redirige al usuario a la página principal.
+    const confirmLogout = () => {
+        console.log("Cerrando sesión...");
+        logout();
+        navigate("/");
     };
     // Animación para el búho (solo la imagen)
+    // Animación para el ícono del búho en el navbar (rotación infinita y efecto hover).
     const owlVariants = {
         animate: {
             rotate: [0, -10, 0, 10, 0],
@@ -68,6 +88,7 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
         hover: { scale: 1.05, transition: { duration: 0.3 } }
     };
     return (
+        <>
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
@@ -89,11 +110,11 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                             src="/buho.png"
                             alt="MarketPlace UCA Logo"
                         />
-                        { /*<img src="/buho.png" alt="Logo búho" className="w-6 h-6" />*/}
                         <span
-                            className="text-xl font-bold text-[#0056b3]">MarketPlace UCA</span>
+                            className="text-xl font-bold text-[#0056b3]">MarketPlace</span>
                     </motion.div>
                 </Link>
+                {/* Input de búsqueda principal. Solo actualiza la búsqueda al presionar Enter. */}
                 <div className="flex items-center max-w-md w-full relative">
                     <Input
                         type="text"
@@ -105,8 +126,8 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                     />
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
+                {/* Botones de acceso rápido y menú de usuario. Incluye favoritos, perfil, productos, y opciones de administrador si corresponde. */}
                 <div className="flex items-center gap-3">
-
                     <motion.div whileHover="hover" whileTap="tap" variants={buttonVariants}>
                         <Button variant="ghost" size="icon" className="rounded-full">
                             <Link to="/favorites">
@@ -122,7 +143,7 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                                 className="rounded-full"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
-                                <User className="w-5 h-5 text-[#0056b3]" />
+                                <SquareChevronDown className="w-5 h-5 text-[#0056b3]" />
                             </Button>
                         </motion.div>
                         <AnimatePresence>
@@ -134,20 +155,18 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                                     exit="exit"
                                     className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-xl z-50"
                                 >
-                                    {/* Perfil del usuario */}
+                                    {/* Perfil del usuario y opciones del menú. Incluye navegación y cierre de sesión. */}
                                     <div className="flex items-center gap-3 p-4 border-b border-gray-200">
-                                        <img
-                                            src="/placeholder.svg?height=40&width=40"
-                                            alt="User profile"
-                                            className="w-10 h-10 rounded-full object-cover"
-                                        />
+                                        <div className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center">
+                                            <span className="text-white font-bold text-lg">{firstLetter}</span>
+                                        </div>
                                         <div>
                                             <p className="font-semibold text-gray-800">{user?.name}</p>
                                             <p className="text-sm text-gray-500">{user?.role}</p>
                                         </div>
                                     </div>
-                                    {/* Opciones del menú */}
                                     <div className="py-2">
+                                        {/* Navegación rápida a perfil, productos, favoritos, y opciones de admin. */}
                                         <motion.div
                                             variants={menuItemVariants}
                                             whileHover="hover"
@@ -157,8 +176,20 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                                                 window.location.href = "/profile"; // Recarga la página al redirigir
                                             }}
                                         >
-                                            <ShoppingBag className="w-4 h-4" />
+                                            <User className="w-4 h-4" />
                                             <span>Mi perfil</span>
+                                        </motion.div>
+                                        <motion.div
+                                            variants={menuItemVariants}
+                                            whileHover="hover"
+                                            className="flex items-center gap-2 px-4 py-2 text-gray-700 cursor-pointer"
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                window.location.href = "/products"; // Recarga la página al redirigir
+                                            }}
+                                        >
+                                            <ShoppingBag className="w-4 h-4" />
+                                            <span>Mis productos</span>
                                         </motion.div>
                                         <motion.div
                                             variants={menuItemVariants}
@@ -206,7 +237,6 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                                             className="flex items-center gap-2 px-4 py-2 text-gray-700 cursor-pointer border-t border-gray-200"
                                             onClick={handleLogout}
                                         >
-
                                             <LogOut className="w-4 h-4" />
                                             <span>Cerrar sesión</span>
                                         </motion.div>
@@ -218,6 +248,17 @@ const Navbar = ({ searchQuery, setSearchQuery, cartCount, isAdmin}) => {
                 </div>
             </div>
         </motion.nav>
+        
+        <ConfirmModal
+            isOpen={showConfirmLogout}
+            onClose={() => setShowConfirmLogout(false)}
+            onConfirm={confirmLogout}
+            title="Cerrar sesión"
+            message="¿Estás seguro de que quieres cerrar sesión? Perderás tu sesión actual."
+            confirmText="Cerrar sesión"
+            cancelText="Cancelar"
+        />
+        </>
     );
 };
 

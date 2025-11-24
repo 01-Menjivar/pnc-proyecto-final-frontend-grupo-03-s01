@@ -9,7 +9,7 @@ export function Button({
   ...props
 }) {
   const baseStyles =
-    "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#339CFF] disabled:opacity-50"
+    "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#339CFF] disabled:opacity-50 cursor-pointer"
 
   const variants = {
     default: "bg-[#0056b3] text-white hover:bg-[#339CFF]",

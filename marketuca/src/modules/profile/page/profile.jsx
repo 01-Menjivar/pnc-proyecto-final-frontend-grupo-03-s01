@@ -1,23 +1,22 @@
 import Navbar from "../../utils/navbar/Navbar.jsx";
 import Footer from "../../utils/footer/Footer.jsx";
 import Profile from "../component/Profile.jsx";
-import ProductCarousel from "../component/ProductCarousel.jsx";
-import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext.jsx";
 
 
-const profile = () => {
-
+const ProfilePage = () => {
+    const {user} = useContext(AuthContext);
     return (
         <div>
             <Navbar
-                isAdmin={true
+                isAdmin={user?.role === "ADMIN"
                 }
             />
             <Profile/>
-            <ProductCarousel/>
             <Footer />
         </div>
     )
 
 }
-export default profile;
+export default ProfilePage;

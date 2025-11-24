@@ -31,7 +31,7 @@ function App() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
       <div className="flex-1 flex flex-col ml-64">
-        <Navbar />
+        <Navbar/>
         <main className="flex-1 pt-16">
           <AnimatePresence mode="wait">
             <motion.div

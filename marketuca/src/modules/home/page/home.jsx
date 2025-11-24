@@ -1,7 +1,6 @@
 // Home.jsx
 import Hero from '../components/Hero';
 import Resources from '../components/Resources';
-import FranjaAzul from '../components/FranjaAzul';
 import HowItWorks from '../components/HowItWorks';
 import Benefits from '../components/Benefits';
 import Footer from '../../utils/footer/Footer.jsx';
@@ -12,7 +11,6 @@ const Home = () => {
     <div>
       <NavbarHome />
       <Hero />
-      <FranjaAzul />
       <Resources />
       <HowItWorks />
       <Benefits />

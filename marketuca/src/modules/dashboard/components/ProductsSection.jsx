@@ -8,9 +8,8 @@ const ProductsSection = ({
                              hasMore,
                              loadMoreProducts,
                              activeCategory,
-                             onProductClick,    // <-- Nombre estándar del prop
+                             onProductClick,   
                              favorites,
-                             toggleFavorite,
                              onLike,
                                 isLiking
 
@@ -47,7 +46,7 @@ const ProductsSection = ({
     }, [isInView, hasMore, loading, loadMoreProducts]);
 
     return (
-        <div className="container px-4 py-12 mx-auto z-10">
+        <div className="container px-4 pb-12 mx-auto z-10">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <h2 className="text-3xl font-bold text-gray-800">
                     {activeCategory === "all" ? "Todos los productos" : activeCategory}
@@ -76,7 +75,7 @@ const ProductsSection = ({
                             <button
                                 type="button"
                                 disabled={isLiking}
-                                className={`absolute top-2 right-2 rounded-full p-2 bg-white/80 backdrop-blur-sm ${
+                                className={`absolute top-2 right-2 rounded-full p-2 bg-white/80 backdrop-blur-sm cursor-pointer ${
                                     favorites.some((f) => f.productId === product.id)
                                         ? "text-red-500"
                                         : "text-gray-500"
@@ -89,10 +88,10 @@ const ProductsSection = ({
                                 <motion.div
                                     variants={heartVariants}
                                     initial="initial"
-                                    animate={favorites.includes(product.id) ? "animate" : "initial"}
+                                    animate={favorites.some((f) => f.productId === product.id) ? "animate" : "initial"}
                                 >
                                     <Heart
-                                        className={`w-5 h-5 ${favorites.includes(product.id) ? "fill-current" : ""}`}
+                                        className={`w-5 h-5 ${favorites.some((f) => f.productId === product.id) ? "fill-current" : ""}`}
                                     />
                                 </motion.div>
                             </button>
@@ -101,33 +100,30 @@ const ProductsSection = ({
                             </div>
                         </div>
                         <div className="p-4">
-                            <div className="flex items-start justify-between gap-2">
-                                <h3 className="font-semibold text-gray-800">{product.title}</h3>
-                                <p className="text-lg font-bold text-[#0056b3]">${product.price?.toFixed(2) ?? "0.00"}</p>
-                            </div>
-                            <div className="flex items-center mt-2 text-sm text-gray-500"><span>{product.seller}</span></div>
-                            <div className="flex items-center mt-2 text-sm text-gray-500">
-                                <span>{product.condition}</span>
-                                <span className="mx-2">•</span>
+                            <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2">{product.title}</h3>
+                            
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-sm text-gray-600 font-medium">{product.seller}</span>
                                 <div className="flex items-center">
-                                    <span className="text-yellow-500">★</span>
-                                    <span className="ml-1">{product.rating ?? "4.5"}</span>
+                                    <span className="text-sm text-gray-600 bg-blue-100 px-2 py-1 rounded">{product.condition}</span>
                                 </div>
                             </div>
-                            <div className="flex mt-4">
 
-                                <motion.div whileHover="hover" whileTap="tap" variants={buttonVariants}>
-                                    <button
-                                        className="bg-gradient-to-r from-[#0056b3] to-[#339CFF] hover:from-[#339CFF] hover:to-[#0056b3] text-white px-3 py-1 rounded"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onProductClick(product) // <<
-
-                                        }}
-                                    >
-                                        Ver detalles
-                                    </button>
-                                </motion.div>
+                            <hr className="border-gray-200 mb-3" />
+                            <div className="flex items-center justify-between">
+                                <p className="text-lg font-bold text-blue-800">${product.price?.toFixed(2) ?? "0.00"}</p>
+                                <motion.button
+                                    className="bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-900 transition-all duration-300 cursor-pointer"
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onProductClick(product);
+                                    }}
+                                >
+                                    Ver detalles
+                                </motion.button>
                             </div>
                         </div>
                     </motion.div>
@@ -147,9 +143,13 @@ const ProductsSection = ({
                     </motion.button>
                 </div>
             )}
-            {!loading && !hasMore && products.length > 0 && (
-                <div className="text-center py-4 text-gray-500">No hay más productos para mostrar.</div>
+
+
+            {products.length === 0 && (
+                <div className="text-center py-4 text-gray-500">No hay productos para mostrar.</div>
             )}
+
+
         </div>
     );
 };

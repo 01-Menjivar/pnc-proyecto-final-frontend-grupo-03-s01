@@ -5,9 +5,10 @@ import { getAllProducts, getLikes } from "../services/dashboardService.js";
 import Navbar from "../../utils/navbar/Navbar.jsx";
 import ParticlesDashboard from "../../utils/ui/ParticlesDashboard.jsx";
 import { ProductDetail } from "../components/modal/product-detail";
+import { IconHeartBroken } from '@tabler/icons-react';
 
 export default function FavoritesPage() {
-  const { token, isAuthenticated } = useContext(AuthContext);
+  const { user, token, isAuthenticated } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,10 +20,10 @@ export default function FavoritesPage() {
       try {
         setLoading(true);
         const productsData = await getAllProducts(token);
-        const likesArray = await getLikes(token); // esto ya es un array
-
+        const likesArray = await getLikes(token); 
+        console.log("Likes obtenidos:", likesArray);
         setProducts(productsData);
-        setFavorites(likesArray.map((like) => like.productId).filter(Boolean));
+        setFavorites(likesArray); // Usar el array de objetos directamente
       } catch (error) {
         console.error("Error al obtener productos o likes:", error);
       } finally {
@@ -32,11 +33,9 @@ export default function FavoritesPage() {
 
     if (isAuthenticated) fetchData();
   }, [isAuthenticated, token]);
-console.log(products);
-console.log(favorites);
   const filteredFavorites = products.filter(
       (product) =>
-          favorites.includes(product.id) &&
+          favorites.some((fav) => fav.productId === product.id) &&
           (!searchQuery || product.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
@@ -44,7 +43,7 @@ console.log(favorites);
       <div className="relative min-h-screen">
         <ParticlesDashboard />
         <Navbar
-            cartCount={0}
+            isAdmin={user?.role === 'ADMIN'}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
         />
@@ -55,7 +54,12 @@ console.log(favorites);
           {loading && <p className="text-center">Cargando...</p>}
 
           {!loading && filteredFavorites.length === 0 && (
-              <p className="text-center text-gray-500">No tienes productos favoritos.</p>
+            <>
+            <p className="text-center text-gray-500">No tienes productos favoritos.</p>
+            <div className="flex justify-center mt-6">
+                <IconHeartBroken className="w-16 h-16 text-gray-300" />
+            </div>
+            </>
           )}
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -86,9 +90,7 @@ console.log(favorites);
             product={selectedProduct}
             isOpen={!!selectedProduct}
             onClose={() => setSelectedProduct(null)}
-            isFavorite={true}
-            onToggleFavorite={() => {}}
-            onAddToCart={() => {}}
+            token={token}
         />
       </div>
   );

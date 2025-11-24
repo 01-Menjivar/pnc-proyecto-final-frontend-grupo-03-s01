@@ -6,7 +6,7 @@ const AdminManager = ({isAdmin}) => {
 
   return(
       <div className={`${isAdmin ? "visible" : "hidden"} px-4 py-2 z-100`}>
-          <Navbar isAdmin={true} />
+          <Navbar isAdmin={isAdmin} />
           <AcceptAdmin/>
           <Footer/>
 

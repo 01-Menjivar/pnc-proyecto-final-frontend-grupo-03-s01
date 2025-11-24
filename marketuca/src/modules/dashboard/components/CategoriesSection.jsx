@@ -1,56 +1,81 @@
 import { motion } from "framer-motion";
+import { 
+  IconApps, 
+  IconBook, 
+  IconDevices, 
+  IconTool, 
+  IconDeviceGamepad2, 
+  IconPizza, 
+  IconShirt,
+  IconDots
+} from '@tabler/icons-react';
 
 const CategoriesSection = ({ categories, activeCategory, setActiveCategory }) => {
   const categoryVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
+    hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
       opacity: 1,
-      scale: 1,
+      y: 0,
       transition: { duration: 0.4, delay: i * 0.1, type: "spring", stiffness: 100, damping: 15 },
     }),
   };
 
-  const buttonVariants = {
-    hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0, 86, 179, 0.2)" },
-    tap: { scale: 0.95 },
+  const categoryConfig = {
+    "all": { icon: IconApps, color: "text-purple-600", bgColor: "bg-purple-50" },
+    "todos": { icon: IconApps, color: "text-purple-600", bgColor: "bg-purple-50" },
+    "libros": { icon: IconBook, color: "text-green-600", bgColor: "bg-green-50" },
+    "tecnologia": { icon: IconDevices, color: "text-blue-600", bgColor: "bg-blue-50" },
+    "servicios": { icon: IconTool, color: "text-orange-600", bgColor: "bg-orange-50" },
+    "entretenimiento": { icon: IconDeviceGamepad2, color: "text-pink-600", bgColor: "bg-pink-50" },
+    "comida": { icon: IconPizza, color: "text-red-600", bgColor: "bg-red-50" },
+    "ropa": { icon: IconShirt, color: "text-indigo-600", bgColor: "bg-indigo-50" },
+    "otros": { icon: IconDots, color: "text-gray-600", bgColor: "bg-gray-50" }
+  };
+
+  const getIconComponent = (categoryId) => {
+    const config = categoryConfig[categoryId.toLowerCase()] || categoryConfig["otros"];
+    const IconComponent = config.icon;
+    return { IconComponent, color: config.color, bgColor: config.bgColor };
   };
 
   return (
       <div className="container px-4 py-12 mx-auto z-20">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">Categorías</h2>
-          <motion.div whileHover="hover" whileTap="tap" variants={buttonVariants}>
-            <button
-                className="text-[#0056b3] hover:text-[#339CFF] transition-colors"
-                onClick={() => setActiveCategory("all")}
-            >
-              Ver todas
-            </button>
-          </motion.div>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 font-montserrat mb-2">Categorías</h2>
+          <p className="text-gray-600 font-montserrat">Explora productos por categoría</p>
         </div>
-        <div className="grid grid-cols-3 gap-4 mb-12 sm:grid-cols-4 md:grid-cols-8">
-          {categories.map((category, index) => (
+        
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {categories.map((category, index) => {
+            const { IconComponent, color, bgColor } = getIconComponent(category.id);
+            const isActive = activeCategory === category.id;
+            
+            return (
               <motion.button
-                  key={category.id}
-                  className={`flex flex-col items-center justify-center h-24 rounded-xl border-2 transition-all ${
-                      activeCategory === category.id
-                          ? "border-[#0056b3] bg-gradient-to-r from-[#0056b3]/10 to-[#339CFF]/10 text-[#0056b3]"
-                          : "border-gray-200 hover:border-[#339CFF] hover:bg-blue-50/60"
-                  }`}
-                  onClick={() => setActiveCategory(category.id)}
-                  variants={categoryVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  custom={index}
-                  whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(0, 86, 179, 0.2)" }}
+                key={category.id}
+                className={`flex items-center gap-3 px-6 py-3 rounded-lg bg-white shadow-md hover:shadow-lg border-b-4 border-gray-400 transition-all duration-300 cursor-pointer ${
+                  isActive 
+                    ? "shadow-lg ring-2 ring-blue-200 bg-blue-50  border-sky-500" 
+                    : "hover:bg-gray-50"
+                }`}
+                onClick={() => setActiveCategory(category.id)}
+                variants={categoryVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                custom={index}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className={`p-2 rounded-full ${activeCategory === category.id ? "bg-blue-100" : "bg-gray-100"}`}>
-                  {category.icon}
+                <div className={`p-2 rounded-full ${bgColor}`}>
+                  <IconComponent size={20} className={color} />
                 </div>
-                <span className="mt-2 text-sm font-medium">{category.name}</span>
+                <span className={`font-medium font-montserrat ${isActive ? 'text-blue-700' : 'text-gray-700'}`}>
+                  {category.name}
+                </span>
               </motion.button>
-          ))}
+            );
+          })}
         </div>
       </div>
   );

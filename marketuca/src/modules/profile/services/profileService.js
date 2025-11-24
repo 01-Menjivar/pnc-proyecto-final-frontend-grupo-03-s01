@@ -8,16 +8,28 @@ const API = axios.create({
     },
 });
 
+API.interceptors.request.use((config) => {
+    const token = localStorage.getItem('auth_token'); 
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export const getUserInfo = async (email, token) => {
     try {
         const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
             params: {
                 email: email
             }
         };
+        
+        // Si se pasa un token específico, usarlo en lugar del de localStorage
+        if (token) {
+            config.headers = {
+                Authorization: `Bearer ${token}`
+            };
+        }
 
         const response = await API.get("/user/email", config);
         return response.data;
@@ -27,41 +39,29 @@ export const getUserInfo = async (email, token) => {
     }
 };
 
-export const getMyProducts = async (token) => {
-    const response = await API.get("/product/my", {
-        headers: token
-            ? { Authorization: `Bearer ${token}` }
-            : undefined
-    });
-
-    // Devuelve directamente el array original de productos:
-    return response.data.data; // <- aquí ya es un array
+export const getMyProducts = async () => {
+    const response = await API.get("/product/my");
+    return response.data.data;
 };
-export const updatePassword = async (oldPassword, newPassword, token) => {
+
+export const updatePassword = async (oldPassword, newPassword) => {
     try {
         const response = await API.patch("/user/password", {
             oldPassword,
             newPassword,
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
         });
 
-        return response.data; // contiene { data: "", message: "Password reset successfully" }
+        return response.data;
     } catch (error) {
         console.error("Error al actualizar la contraseña:", error);
         throw error;
     }
 };
-export const updatePhoneNumber= async (phoneNumber, token) => {
+
+export const updatePhoneNumber= async (phoneNumber) => {
     try {
         const response = await API.patch("/user/phoneNumber", {
             phoneNumber
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
         });
 
         return response.data;
@@ -70,3 +70,43 @@ export const updatePhoneNumber= async (phoneNumber, token) => {
         throw error;
     }
 };
+
+export const postReview = async (email, rating, comment) =>{
+    const body = {
+        revieweeEmail: email,
+        rating: rating,
+        comment: comment
+    }
+    const response = await API.post('/reviews/create', body);
+    return response.data.data
+}
+
+export const getReviewsBySellerEmail = async (email) =>{
+    const response = await API.get(`/reviews/seller/${email}`);
+    return response.data.data
+}
+
+export const getReviewsByUser = async () =>{
+    const response = await API.get('/reviews/user');
+    return response.data.data
+}
+
+export const deleteReviewById = async (reviewId) =>{
+    const response = await API.delete(`/reviews/delete/${reviewId}`);
+    return response.data.data
+}
+
+export const getReviewById = async (reviewId) =>{
+    const response = await API.get(`/reviews/${reviewId}`);
+    return response.data.data
+}
+
+export const updateReviewById = async (revieweeEmail, reviewId, rating, comment) =>{
+    const body = {
+        revieweeEmail: revieweeEmail,
+        rating: rating,
+        comment: comment
+    }
+    const response = await API.patch(`/reviews/update/${reviewId}`, body);
+    return response.data.data
+}

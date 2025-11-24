@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../context/AuthContext.jsx";
-import { getMyProducts } from "../services/profileService.js";
+import { getMyProducts } from "../../profile/services/profileService.js";
 import {Link} from "react-router-dom";
+import { IconMoodEmpty } from '@tabler/icons-react';
 
 const ProductGrid = () => {
     const [products, setProducts] = useState([]);
@@ -16,6 +17,7 @@ const ProductGrid = () => {
                     ? result.filter(p => p.active)
                     : [];
                 setProducts(activeProducts);
+                console.log("Productos obtenidos:", activeProducts);
             } catch (error) {
                 console.error("Error al obtener productos:", error);
             }
@@ -48,6 +50,17 @@ const ProductGrid = () => {
             >
                 Mis productos
             </motion.h2>
+
+            {
+                products.length === 0 && (
+                    <>
+                    <p className="text-center text-gray-500 mt-10">No tienes productos activos.</p>
+                    <div className="flex justify-center mt-6">
+                        <IconMoodEmpty className="w-16 h-16 text-gray-300" />
+                    </div>
+                    </>
+                )
+            }
 
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {products.map((product, index) => (
@@ -96,10 +109,12 @@ const ProductGrid = () => {
                             </div>
                         </motion.div>
                     </Link>
-                ))}
+                ))
+                }
             </div>
         </div>
-    );
+    )
+
 };
 
 export default ProductGrid;

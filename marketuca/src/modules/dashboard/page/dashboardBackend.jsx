@@ -12,18 +12,12 @@ import {
   Briefcase,
   Coffee,
   Gamepad2,
-  Heart,
   Home,
   Laptop,
-  MessageSquare,
-  ShoppingBag,
-  ShoppingCart,
-  User,
   ShirtIcon,
   RulerIcon,
 } from "lucide-react";
 import { AuthContext } from "../../../context/AuthContext.jsx";
-import useAuth from "../../../hooks/useAuth.js";
 import {
   dislikeProduct,
   getAllProducts,
@@ -32,7 +26,8 @@ import {
 } from "../services/dashboardService.js";
 
 export default function Dashboard() {
-  const { token, isAuthenticated } = useContext(AuthContext);
+  const { token, user, isAuthenticated } = useContext(AuthContext);
+  const isAdmin = user?.role === "ADMIN";
 
   const categories = [
     { id: "all", name: "Todo", icon: <Home className="w-5 h-5" /> },
@@ -100,7 +95,6 @@ export default function Dashboard() {
 
   const handleOpenSellModal = () => setIsSellModalOpen(true);
   const handleCloseSellModal = () => setIsSellModalOpen(false);
-  const handleAddToCart = (product) => setCart((prev) => [...prev, product]);
 
   const handleLike = async (productId) => {
     if (likingProductIds.has(productId)) return; // Evita múltiples clics simultáneos
@@ -131,40 +125,38 @@ export default function Dashboard() {
     }
   };
   return (
-      <div className="relative min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <ParticlesDashboard />
         <Navbar
             cartCount={cart.length}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            isAdmin={true}
+            isAdmin={isAdmin}
         />
-        <HeroSection onSellClick={handleOpenSellModal} />
-        <CategoriesSection
-            categories={categories}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-        />
-        <ProductsSection
-            products={filteredProducts}
-            loading={loading}
-            onProductClick={handleProductClick}
-            favorites={favorites}
-            toggleFavorite={() => {}}
-            onLike={handleLike}
-            isLiking={likingProductIds.has(selectedProduct?.id)}
+        <main className="flex-1">
+          <HeroSection onSellClick={handleOpenSellModal} />
+          <CategoriesSection
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+          />
+          <ProductsSection
+              products={filteredProducts}
+              loading={loading}
+              onProductClick={handleProductClick}
+              favorites={favorites}
+              toggleFavorite={() => {}}
+              onLike={handleLike}
+              isLiking={likingProductIds.has(selectedProduct?.id)}
 
-        />
+          />
+        </main>
         <Footer />
         <ProductDetail
             product={selectedProduct}
             isOpen={isProductDetailOpen}
             onClose={handleCloseProductDetail}
-            onAddToCart={handleAddToCart}
-            isFavorite={favorites.includes(selectedProduct?.id)}
-            onToggleFavorite={handleLike}
-            onLike={handleLike}
-            isLiking={likingProductIds.has(selectedProduct?.id)}
+            token={token}
         />
         <SellProductModal
             isOpen={isSellModalOpen}
