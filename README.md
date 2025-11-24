@@ -17,6 +17,23 @@ Marketplace UCA nace para cerrar la brecha entre la necesidad y la oportunidad d
 1.  **Segunda vida a los recursos:** Muchos estudiantes acumulan libros, calculadoras y materiales valiosos que ya no utilizan. Aquí encuentran una forma sencilla de pasarlos a quien realmente los necesita.
 2.  **Impulso al talento local:** Sabemos que hay mucho espíritu emprendedor en la UCA. Esta plataforma ofrece el escenario perfecto para que esos negocios crezcan dentro de un entorno seguro y conocido, sin el ruido de las redes sociales externas.
 
+
+## 🎨 Diseño Visual y Experiencia de Usuario (UI/UX)
+
+La interfaz ha sido diseñada priorizando una navegación intuitiva y una estética limpia que respeta la identidad visual institucional. Hemos traducido los prototipos de **Figma** a una experiencia real y fluida utilizando **React** y **Tailwind CSS**.
+
+El diseño contempla flujos clave que enriquecen la experiencia del estudiante:
+
+  * **🔐 Acceso y Seguridad:** Inicio de sesión con validación estricta de correo institucional y persistencia de sesión segura.
+  * **❤️ Personalización (Favoritos):** Los usuarios pueden gestionar su propia lista de deseos, guardando los productos que más les interesan para acceder a ellos rápidamente.
+  * **💬 Comunidad Activa:** Implementamos un sistema de comentarios anidados y filtrables en tiempo real, permitiendo preguntas y respuestas directas en cada producto.
+  * **📦 Publicación Guiada:** Un "Wizard" intuitivo de 3 pasos facilita la venta de productos sin complicaciones.
+  * **⭐ Sistema de Confianza:** Perfiles de vendedor transparentes con un historial visible de reseñas y calificaciones promedio.
+  * **🛡️ Interfaz Adaptativa:** La navegación y las opciones del menú se ajustan automáticamente según el rol del usuario (Estudiante o Administrador).
+
+> 🔗 **[Ver Prototipo Interactivo en Figma](https://www.figma.com/design/Ji2zGIbuifh7lB3gwDYijF/Dise%C3%B1o-visual-del-sitio-web?node-id=0-1&t=1EE9Jatlka8MgP50-1)**
+
+
 ## ‼️ Consideraciones de software
 
 El frontend ha sido desarrollado utilizando *React 19* junto con *Vite 7* para asegurar un alto rendimiento y una experiencia de desarrollo ágil.
